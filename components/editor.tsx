@@ -56,7 +56,7 @@ const Editor = ({ value, onChange }: { value: string; onChange: (content: string
     <div className="p-4 border rounded-lg">
       <h2 className="text-lg font-bold mb-2 text-primary">Trình soạn thảo</h2>
 
-      <div className={`p-2 flex flex-wrap ${isSticky ? 'fixed top-16 left-64 w-full bg-white shadow-lg z-50' : ''}`}>
+      <div className={`p-2 space-x-2 flex flex-wrap ${isSticky ? 'fixed top-12 left-0 w-full bg-white shadow-lg z-50' : ''}`}>
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleBold().run()}

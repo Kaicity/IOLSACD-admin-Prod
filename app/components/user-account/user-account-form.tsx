@@ -137,7 +137,6 @@ export default function UserAccountForm({
             {mode === 'CREATE' && (
               <div className="flex flex-col gap-y-2 col-span-4">
                 <Label>Vai trò</Label>
-
                 <Select
                   defaultValue={isRoute}
                   onValueChange={(value) => {
@@ -167,21 +166,21 @@ export default function UserAccountForm({
             {/* Full Name */}
             <div className="flex flex-col gap-y-2 col-span-4">
               <Label>Họ tên</Label>
-              <Input disabled={isRoute === null} id="name" placeholder="Nhập họ tên đầy đủ" {...register('name')} />
+              <Input disabled={isRoute === ''} id="name" placeholder="Nhập họ tên đầy đủ" {...register('name')} />
               {errors.name && <p className="text-red-500 text-sm">{errors.name.message}</p>}
             </div>
 
             {/* Phone */}
             <div className="flex flex-col gap-y-2 col-span-4">
               <Label>Tên đăng nhập</Label>
-              <Input disabled={isRoute === null} id="userName" placeholder="Nhập tên đăng nhập" {...register('userName')} />
+              <Input disabled={isRoute === ''} id="userName" placeholder="Nhập tên đăng nhập" {...register('userName')} />
               {errors.userName && <p className="text-red-500 text-sm">{errors.userName.message}</p>}
             </div>
 
             {/* Email */}
             <div className="flex flex-col gap-y-2 col-span-4">
               <Label>Mật khẩu</Label>
-              <Input disabled={isRoute === null} id="gmail" placeholder="#Adfe8f8jhz!@" {...register('password')} />
+              <Input disabled={isRoute === ''} id="gmail" placeholder="#Adfe8f8jhz!@" {...register('password')} />
               {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
             </div>
           </div>

@@ -115,28 +115,28 @@ export default function HumanResourceForm({
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 items-center gap-4">
             {/* Full Name */}
-            <div className="flex flex-col gap-y-2 col-span-2">
+            <div className="flex flex-col gap-y-2 col-span-4 lg:col-span-2">
               <Label>Họ tên</Label>
               <Input id="fullName" placeholder="Nhập họ tên đầy đủ" {...register('fullName')} />
               {errors.fullName && <p className="text-red-500 text-sm">{errors.fullName.message}</p>}
             </div>
 
             {/* Phone */}
-            <div className="flex flex-col gap-y-2 col-span-2">
+            <div className="flex flex-col gap-y-2 col-span-4 lg:col-span-2">
               <Label>Số điện thoại</Label>
               <Input id="phone" placeholder="Nhập số điện thoại" {...register('phone')} />
               {errors.phone && <p className="text-red-500 text-sm">{errors.phone.message}</p>}
             </div>
 
             {/* Email */}
-            <div className="flex flex-col gap-y-2 col-span-2">
+            <div className="flex flex-col gap-y-2 col-span-4 lg:col-span-2">
               <Label>Email</Label>
               <Input id="gmail" placeholder="nguyenvana@gmail.com" {...register('gmail')} />
               {errors.gmail && <p className="text-red-500 text-sm">{errors.gmail.message}</p>}
             </div>
 
             {/* Role */}
-            <div className="flex flex-col gap-y-2 col-span-2">
+            <div className="flex flex-col gap-y-2 col-span-4 lg:col-span-2">
               <Label>Vai trò</Label>
               <Select
                 defaultValue={humanResource?.role}
