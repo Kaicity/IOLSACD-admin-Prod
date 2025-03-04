@@ -1,0 +1,143 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #a1a7ac;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #5a6268;
+}
+
+@layer base {
+  :root {
+    --background: 0 0% 100%; /* Màu nền (trắng) */
+    --foreground: 222.2 84% 4.9%; /* Màu chữ chính (xanh đen đậm) */
+    --card: 0 0% 100%; /* Màu nền thẻ (trắng) */
+    --card-foreground: 222.2 84% 4.9%; /* Màu chữ của thẻ (xanh đen đậm) */
+    --popover: 0 0% 100%; /* Màu nền popover (trắng) */
+    --popover-foreground: 222.2 84% 4.9%; /* Màu chữ trong popover (xanh đen đậm) */
+    --primary: 221.2 83.2% 53.3%; /* Màu chính (xanh lam tươi) */
+    --primary-foreground: 210 40% 98%; /* Màu chữ trên nền chính (xám rất nhạt) */
+    --secondary: 210 40% 96.1%; /* Màu phụ (xám nhạt) */
+    --secondary-foreground: 222.2 47.4% 11.2%; /* Màu chữ trên nền phụ (xanh đen nhạt) */
+    --muted: 210 40% 96.1%; /* Màu nền bị làm mờ (xám nhạt) */
+    --muted-foreground: 215.4 16.3% 46.9%; /* Màu chữ bị làm mờ (xám xanh trung bình) */
+    --accent: 210 40% 96.1%; /* Màu nhấn (xám nhạt) */
+    --accent-foreground: 222.2 47.4% 11.2%; /* Màu chữ trên nền nhấn (xanh đen nhạt) */
+    --destructive: 0 84.2% 60.2%; /* Màu cảnh báo (đỏ sáng) */
+    --destructive-foreground: 210 40% 98%; /* Màu chữ trên nền cảnh báo (xám rất nhạt) */
+    --border: 214.3 31.8% 91.4%; /* Màu viền (xám nhạt) */
+    --input: 214.3 31.8% 91.4%; /* Màu nền của input (xám nhạt) */
+    --ring: 221.2 83.2% 53.3%; /* Màu viền nổi bật (xanh lam tươi) */
+    --radius: 0.5rem; /* Độ bo góc */
+    --chart-1: 12 76% 61%; /* Màu biểu đồ 1 (cam) */
+    --chart-2: 173 58% 39%; /* Màu biểu đồ 2 (xanh lục đậm) */
+    --chart-3: 197 37% 24%; /* Màu biểu đồ 3 (xanh nước biển đậm) */
+    --chart-4: 43 74% 66%; /* Màu biểu đồ 4 (vàng nhạt) */
+    --chart-5: 27 87% 67%; /* Màu biểu đồ 5 (vàng cam) */
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 217.2 91.2% 59.8%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 224.3 76.3% 48%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+.ProseMirror ul {
+  list-style-type: disc;
+  padding-left: 20px;
+}
+
+.ProseMirror ol {
+  list-style-type: decimal;
+  padding-left: 20px;
+}
+
+.ProseMirror li {
+  margin-bottom: 5px;
+}
+
+.ProseMirror h1 {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.ProseMirror h2 {
+  font-size: 1.75rem;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.ProseMirror h3 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+
+.ProseMirror h4 {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.ProseMirror h5 {
+  font-size: 1rem;
+  font-weight: bold;
+  margin-bottom: 6px;
+}
