@@ -65,7 +65,7 @@ export default function Login() {
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start px-6 py-8 bg-gray-100 rounded-md shadow-lg">
-        <Image width={50} height={50} src="/logo.png" alt="Admin Logo" className="w-40 h-auto object-cover mx-auto block" />
+        <Image src="/logo.png" alt="Admin Logo" className="w-40 h-auto object-cover mx-auto block" />
         <h1 className="text-2xl font-bold text-primary text-center sm:text-left">Đăng nhập vào hệ thống quản trị</h1>
         <form className="w-full max-w-sm flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-col gap-2">
