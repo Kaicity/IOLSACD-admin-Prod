@@ -36,6 +36,8 @@ const Editor = ({ value, onChange }: { value: string; onChange: (content: string
   useEffect(() => {
     if (editor && value !== editor.getHTML()) {
       editor.commands.setContent(value);
+    } else {
+      editor.commands.setContent("<h2>Tiêu đề</h2><p>Giới thiệu ngắn về bài viết</p>");
     }
 
     const handleScroll = () => {
