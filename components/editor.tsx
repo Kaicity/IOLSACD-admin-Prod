@@ -4,12 +4,25 @@ import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Underline from '@tiptap/extension-underline';
 import Image from '@tiptap/extension-image';
-
-import { BoldIcon, ItalicIcon, List, ListOrdered, Redo2, StrikethroughIcon, UnderlineIcon, Undo2 } from 'lucide-react';
+import {
+  AlignCenter,
+  AlignLeft,
+  AlignRight,
+  BoldIcon,
+  ItalicIcon,
+  List,
+  ListOrdered,
+  Redo2,
+  StrikethroughIcon,
+  UnderlineIcon,
+  Undo2,
+  YoutubeIcon,
+} from 'lucide-react';
 import { Label } from '@/components/ui/label';
 import { Color } from '@tiptap/extension-color';
 import TextStyle from '@tiptap/extension-text-style';
-
+import TextAlign from '@tiptap/extension-text-align';
+import Youtube from '@tiptap/extension-youtube';
 import { Separator } from './ui/separator';
 import { UploadButton } from '@/lib/uploadthing';
 import { useEffect, useState } from 'react';
@@ -17,8 +30,24 @@ import { useEffect, useState } from 'react';
 const Editor = ({ value, onChange }: { value: string; onChange: (content: string) => void }) => {
   const [isSticky, setIsSticky] = useState(false);
 
+  const [height, setHeight] = useState('480');
+  const [width, setWidth] = useState('640');
+
   const editor = useEditor({
-    extensions: [StarterKit, Underline, Image, TextStyle, Color],
+    extensions: [
+      StarterKit,
+      Underline,
+      Image,
+      TextStyle,
+      Color,
+      TextAlign.configure({
+        types: ['heading', 'paragraph'],
+      }),
+      Youtube.configure({
+        controls: false,
+        nocookie: true,
+      }),
+    ],
     content: value || `<h2>Tiêu đề</h2><p>Giới thiệu ngắn về bài viết</p>`,
     onUpdate: ({ editor }) => {
       onChange(editor.getHTML());
@@ -27,10 +56,23 @@ const Editor = ({ value, onChange }: { value: string; onChange: (content: string
       attributes: {
         class:
           'h-full cursor-text rounded-md border p-5 ring-offset-background focus-within:outline-none focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2',
+        spellcheck: 'false',
       },
     },
     immediatelyRender: false,
   });
+
+  const addYoutubeVideo = () => {
+    const url = prompt('Nhập đường dẫn Youtube');
+
+    if (url) {
+      editor?.commands.setYoutubeVideo({
+        src: url,
+        width: Math.max(320, parseInt(width, 10)) || 640,
+        height: Math.max(180, parseInt(height, 10)) || 480,
+      });
+    }
+  };
 
   // Cập nhật nội dung editor khi giá trị value thay đổi
   useEffect(() => {
@@ -55,7 +97,6 @@ const Editor = ({ value, onChange }: { value: string; onChange: (content: string
   return (
     <div className="p-4 border rounded-lg">
       <h2 className="text-lg font-bold mb-2 text-primary">Trình soạn thảo</h2>
-
       <div className={`p-2 space-x-2 flex flex-wrap ${isSticky ? 'fixed top-12 left-0 w-full bg-white shadow-lg z-50' : ''}`}>
         <button
           type="button"
@@ -122,6 +163,35 @@ const Editor = ({ value, onChange }: { value: string; onChange: (content: string
         </button>
         <button
           type="button"
+          onClick={() => editor.chain().focus().toggleHeading({ level: 6 }).run()}
+          className={`px-2 py-1 border rounded ${editor.isActive('heading', { level: 6 }) ? 'bg-gray-300' : ''}`}
+        >
+          H6
+        </button>
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().setTextAlign('left').run()}
+          className={`px-2 py-1 border rounded ${editor.isActive({ textAlign: 'left' }) ? 'bg-gray-300' : ''}`}
+        >
+          <AlignLeft className="w-4 h-4" />
+        </button>
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().setTextAlign('center').run()}
+          className={`px-2 py-1 border rounded ${editor.isActive({ textAlign: 'center' }) ? 'bg-gray-300' : ''}`}
+        >
+          <AlignCenter className="w-4 h-4" />
+        </button>
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().setTextAlign('right').run()}
+          className={`px-2 py-1 border rounded ${editor.isActive({ textAlign: 'right' }) ? 'bg-gray-300' : ''}`}
+        >
+          <AlignRight className="w-4 h-4" />
+        </button>
+
+        <button
+          type="button"
           onClick={() => editor.chain().focus().toggleBulletList().run()}
           className={`px-2 py-1 border rounded ${editor.isActive('bulletList') ? 'bg-gray-300' : ''}`}
         >
@@ -165,9 +235,57 @@ const Editor = ({ value, onChange }: { value: string; onChange: (content: string
           >
             🎨
           </Label>
+
           <button type="button" onClick={() => editor.chain().focus().unsetColor().run()} className="px-2 py-1 border rounded">
             Reset color
           </button>
+        </div>
+      </div>
+
+      <div className="p-2">
+        <div className="flex items-center gap-2">
+          <div className="flex flex-col">
+            <label>Chiều dài</label>
+            <input
+              id="width"
+              type="number"
+              min="320"
+              max="1024"
+              placeholder="Width"
+              value={width}
+              onChange={(event) => setWidth(event.target.value)}
+              className="w-24 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brandPrimary"
+            />
+          </div>
+          <div className="flex flex-col">
+            <label>Chiều rộng</label>
+            <input
+              id="height"
+              type="number"
+              min="180"
+              max="720"
+              placeholder="Height"
+              value={height}
+              onChange={(event) => setHeight(event.target.value)}
+              className="w-24 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brandPrimary"
+            />
+          </div>
+          <div className="flex flex-col">
+            <label>Đường dẫn URL</label>
+            <div>
+              <button
+                type="button"
+                id="add"
+                onClick={addYoutubeVideo}
+                className="px-4 py-2 bg-red-500 text-black font-semibold rounded-md shadow-md hover:bg-opacity-90 transition-all"
+              >
+                <div className="flex gap-1 text-white">
+                  <span>Youtube</span>
+                  <YoutubeIcon className="text-white text-center block" />
+                </div>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -206,7 +324,7 @@ const Editor = ({ value, onChange }: { value: string; onChange: (content: string
       <div className="flex flex-col gap-2 items-center py-4">
         <Label className="text-primary font-bold">Tải hình ảnh lên trình soạn thảo</Label>
         <UploadButton
-          endpoint="imageUploader"
+          endpoint="singleImageUploader"
           onClientUploadComplete={(res) => {
             if (res && res.length > 0) {
               res.forEach((file) => {
