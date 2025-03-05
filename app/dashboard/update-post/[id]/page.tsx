@@ -191,7 +191,7 @@ function UpdatePostDynamic() {
                         console.log('Đã có lỗi xảy ra khi upload file', error);
                         toast.error(error.message);
                       }}
-                      endpoint="imageUploader"
+                      endpoint="singleImageUploader"
                     />
                   )}
                   {errors.preview_img && <p className="text-red-500 text-sm">{errors.preview_img.message}</p>}
