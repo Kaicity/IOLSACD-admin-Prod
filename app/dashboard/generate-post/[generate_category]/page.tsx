@@ -76,7 +76,8 @@ function GeneratePostDynamic() {
     }
   }, undefined);
 
-  const content = watch('content');
+  let content = watch('content');
+  content = '<h2>Tiêu đề</h2><p>Giới thiệu ngắn về bài viết</p>';
 
   const onSubmit = (data: ArticleFormData) => {
     startTransition(() => {
@@ -85,7 +86,7 @@ function GeneratePostDynamic() {
   };
 
   useEffect(() => {
-    setValue('preview_img', 'https://zfindzsnrw.ufs.sh/f/H7EoNX2A64p0VlyAWaXZJtOvrY5oXyUw61m78AjPCHpNEeuf');
+    setValue('preview_img', 'https://utfs.io/f/H7EoNX2A64p0VlyAWaXZJtOvrY5oXyUw61m78AjPCHpNEeuf');
     generateTypeByParam(params?.generate_category as string);
   }, []);
 
