@@ -1,33 +1,36 @@
 import { instance } from '.';
-import type { HumanResourcePagination } from '../models/features/human-resource';
+import type Reservation from '../models/features/reservation';
+import type { ReservationPagination } from '../models/features/reservation';
 
 interface FilterParams {
   query?: string;
-  role?: string;
-  isShow?: boolean;
+  type?: string;
+  startDate?: string;
+  endDate?: string;
 }
 
-export const getHumanResource = async (
+export const getReservation = async (
   page: number,
   limit: number,
   total: number,
   filters: FilterParams,
-): Promise<HumanResourcePagination> => {
+): Promise<ReservationPagination> => {
   try {
-    const response = await instance.get(`member`, {
+    const response = await instance.get(`reservation`, {
       params: {
         page,
         limit,
         total,
         query: filters.query,
-        role: filters.role,
-        isShow: filters.isShow,
+        type: filters.type,
+        startDate: filters.startDate,
+        endDate: filters.endDate,
       },
     });
 
     if (response.data?.statusCode === 200 && response.data?.data) {
       return {
-        members: response.data?.data.members,
+        reservations: response.data?.data.reservations,
         pagination: {
           page: response.data?.data.pagination.page,
           limit: response.data?.data.pagination.limit,
@@ -43,9 +46,9 @@ export const getHumanResource = async (
   }
 };
 
-export const createHumanResource = async (humanResource: any): Promise<boolean> => {
+export const createReservation = async (reservation: any): Promise<boolean> => {
   try {
-    const response = await instance.post(`member`, humanResource);
+    const response = await instance.post(`reservation`, reservation);
 
     if (response.data?.statusCode === 201) {
       return true;
@@ -58,9 +61,9 @@ export const createHumanResource = async (humanResource: any): Promise<boolean> 
   }
 };
 
-export const deleteHumanResourceById = async (id: string): Promise<boolean> => {
+export const deleteReservationById = async (id: string): Promise<boolean> => {
   try {
-    const response = await instance.delete(`member/${id}`);
+    const response = await instance.delete(`reservation/${id}`);
 
     if (response.data?.statusCode === 200) {
       return true;
@@ -73,14 +76,29 @@ export const deleteHumanResourceById = async (id: string): Promise<boolean> => {
   }
 };
 
-export const updateHumanResourceById = async (humanResource: any, id: string): Promise<boolean> => {
+export const updateReservationById = async (reservation: any, id: string): Promise<boolean> => {
   try {
-    const response = await instance.put(`member/${id}`, humanResource);
+    const response = await instance.put(`reservation/${id}`, reservation);
 
     if (response.data?.statusCode === 200) {
       return true;
     } else {
       return false;
+    }
+  } catch (error: any) {
+    const errorMessage = error.response?.data?.message;
+    throw new Error(errorMessage);
+  }
+};
+
+export const getReservationById = async (id: string): Promise<Reservation | null> => {
+  try {
+    const response = await instance.get(`reservation/${id}`);
+
+    if (response.data?.statusCode === 200) {
+      return response.data?.data;
+    } else {
+      return null;
     }
   } catch (error: any) {
     const errorMessage = error.response?.data?.message;

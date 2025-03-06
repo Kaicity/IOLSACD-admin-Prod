@@ -163,19 +163,8 @@ function UpdatePostDynamic() {
                   />
                   {currentPreviewImage ? (
                     <div className="relative w-full sm:w-[400px] lg:w-[600px] h-auto">
-                      <Image
-                        src={currentPreviewImage}
-                        alt="profileImage"
-                        className="object-cover rounded-md w-full h-auto"
-                        width={600}
-                        height={300}
-                      />
-                      <Button
-                        onClick={handleDeleteImage}
-                        variant="destructive"
-                        className="absolute w-6 h-6 -top-3 -right-3 rounded-full"
-                        type="button"
-                      >
+                      <Image src={currentPreviewImage} alt="profileImage" className="object-cover rounded-md w-full h-auto" width={600} height={300} />
+                      <Button onClick={handleDeleteImage} variant="destructive" className="absolute w-6 h-6 -top-3 -right-3 rounded-full" type="button">
                         <X className="w-5 h-5" />
                       </Button>
                     </div>
