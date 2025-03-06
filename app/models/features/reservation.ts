@@ -7,11 +7,13 @@ export default interface Reservation {
   gmail: string;
   address: string;
   content: string;
+  type: string;
   subject: string;
-  file?: string;
+  file: string;
   consultDate: string;
-  created_date: string;
-  status: 'PENDING' | 'CONFIRMED' | 'CANCELLED';
+  createdDate: string;
+  updatedDate: string;
+  status: string;
 }
 
 export interface ReservationPagination {

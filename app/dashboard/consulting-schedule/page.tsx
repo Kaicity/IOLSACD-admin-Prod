@@ -1,8 +1,9 @@
 'use client';
 
-import { deleteReservationById, getReservation } from '@/app/api/reservation';
+import { deleteReservationById, getReservation, getReservationById } from '@/app/api/reservation';
 import { DataTable } from '@/app/components/dashboard/DataTable';
 import HeaderContent from '@/app/components/dashboard/HeaderContent';
+import ReservationForm from '@/app/components/reservation/reservation-form';
 import withAuth from '@/app/components/withAuth';
 import { RESERVATION_TYPE_OPTIONS } from '@/app/constants/reservationOptions';
 import {
@@ -16,14 +17,16 @@ import type Reservation from '@/app/models/features/reservation';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import { DatePicker } from '@/components/ui/datepicker';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
 import type { ColumnDef } from '@tanstack/react-table';
 import { format } from 'date-fns';
-import { Edit, EllipsisVertical, EyeIcon, Mail, PhoneCall, PlusCircle, RotateCcwIcon, Trash } from 'lucide-react';
+import { Download, Edit, EllipsisVertical, EyeIcon, Mail, PhoneCall, PlusCircle, RotateCcwIcon, Trash } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
@@ -32,8 +35,9 @@ type btnActions = 'CREATE' | 'UPDATE' | 'SEE' | 'PRINT' | 'NULL';
 function ConsultingSchedule() {
   const [searchValue, setSearchValue] = useState<string>('');
   const [typeFilter, setTypeFilter] = useState('');
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
+  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [endDate, setEndDate] = useState<Date | null>(null);
+
   const [isShowFilter, setIsShowFilter] = useState<boolean>(true);
   const [reservations, setReservations] = useState<Reservation[]>([]);
   const [reservation, setReservation] = useState<Reservation | null>(null);
@@ -50,8 +54,8 @@ function ConsultingSchedule() {
       const response = await getReservation(page, limit, total, {
         query: searchValue,
         type: typeFilter,
-        startDate: startDate,
-        endDate: endDate,
+        startDate: startDate ? startDate.toISOString().split('T')[0] : '',
+        endDate: endDate ? endDate.toISOString().split('T')[0] : '',
       });
 
       setReservations(response.reservations);
@@ -63,9 +67,9 @@ function ConsultingSchedule() {
 
   useEffect(() => {
     fetchReservation();
-  }, [page, limit, searchValue, typeFilter, isShowFilter, reLoadData]);
+  }, [page, limit, searchValue, typeFilter, isShowFilter, reLoadData, startDate, endDate]);
 
-  const handleUpdate = (resource: Reservation) => {
+  const handleUpdate = async (resource: Reservation) => {
     setActions('UPDATE');
     setIsDialogOpen(true);
     setReservation(resource);
@@ -88,6 +92,16 @@ function ConsultingSchedule() {
     setActions('CREATE');
     setIsDialogOpen(true);
     setReservation(null);
+  };
+
+  const handleStartDateChange = (date: Date | undefined) => {
+    setStartDate(date as Date);
+    console.log('Selected Date:', date);
+  };
+
+  const handleSEndDateChange = (date: Date | undefined) => {
+    setEndDate(date as Date);
+    console.log('Selected Date:', date);
   };
 
   // Colunm Table
@@ -149,6 +163,21 @@ function ConsultingSchedule() {
         return <span>{format(date, 'dd-MM-yyyy')}</span>;
       },
     },
+    // {
+    //   accessorKey: 'file',
+    //   header: 'TẢI XUỐNG',
+    //   cell: ({ row }) => {
+    //     const fileUrl = row.getValue('file') as string;
+    //     return fileUrl ? (
+    //       <a href={fileUrl} download className="flex items-center gap-2 text-blue-600 hover:underline">
+    //         <Download className="h-4 w-4" />
+    //         Tải xuống
+    //       </a>
+    //     ) : (
+    //       <span className="text-gray-400">Không có tệp</span>
+    //     );
+    //   },
+    // },
     {
       accessorKey: 'status',
       header: 'TRẠNG THÁI',
@@ -230,11 +259,37 @@ function ConsultingSchedule() {
             </SelectContent>
           </Select>
 
+          <div className="w-full lg:w-[250px] lg:ml-8">
+            <div className="flex items-center gap-2">
+              <Label className="whitespace-nowrap text-primary">Từ ngày /</Label>
+              <DatePicker
+                onDateChange={handleStartDateChange}
+                startYear={1900}
+                dateValue={startDate as Date}
+                endYear={new Date().getFullYear()}
+              />
+            </div>
+          </div>
+
+          <div className="w-full lg:w-[250px]">
+            <div className="flex items-center gap-2">
+              <Label className="whitespace-nowrap text-primary">Đến ngày /</Label>
+              <DatePicker
+                onDateChange={handleSEndDateChange}
+                startYear={1900}
+                dateValue={endDate as Date}
+                endYear={new Date().getFullYear()}
+              />
+            </div>
+          </div>
+
           <Button
             variant="outline"
             onClick={() => {
               setSearchValue('');
               setTypeFilter('');
+              setStartDate(null);
+              setEndDate(null);
               setIsShowFilter(true);
               setPage(1);
             }}
@@ -248,13 +303,13 @@ function ConsultingSchedule() {
               Tạo
             </Button>
 
-            {/* <HumanResourceForm
+            <ReservationForm
               mode={actions}
-              humanResource={humanResource!}
+              reservation={reservation!}
               isDialogOpen={isDialogOpen}
               setIsDialogOpen={setIsDialogOpen}
               reloadData={() => setReLoadData((prev) => !prev)}
-            /> */}
+            />
           </div>
         </div>
 

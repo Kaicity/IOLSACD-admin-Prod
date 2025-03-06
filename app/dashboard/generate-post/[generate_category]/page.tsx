@@ -196,6 +196,22 @@ function GeneratePostDynamic() {
                   {errors.preview_img && <p className="text-red-500 text-sm">{errors.preview_img.message}</p>}
                 </div>
 
+                {/* Ngôn ngữ */}
+                <div className="flex flex-col gap-y-2 col-span-1">
+                  <Label>Chọn ngôn ngữ bài báo</Label>
+                  <Select>
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Chọn ngôn ngữ" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectItem value="ENDLISH">Tiếng Anh</SelectItem>
+                        <SelectItem value="VIETNAMESE">Tiếng Việt</SelectItem>
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </div>
+
                 {/* Nội dung bài báo */}
                 <div className="flex flex-col gap-y-2 col-span-1 sm:col-span-2 lg:col-span-4">
                   <Label>Nội dung bố cục bài báo</Label>

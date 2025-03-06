@@ -97,7 +97,7 @@ export default function HumanResourceForm({
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-      <DialogContent className="sm:max-w-[825px]">
+      <DialogContent className="max-w-full max-h-[600px] md:max-w-[625px] md:max-h-[500px] lg:max-w-[825px] lg:max-h-full overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-primary">{mode === 'CREATE' ? 'Tạo nhân sự' : 'Cập nhật thông tin'}</DialogTitle>
           <DialogDescription>

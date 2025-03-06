@@ -21,8 +21,6 @@ import { notFound, useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
-type btnActions = 'CREATE' | 'UPDATE' | 'SEE' | 'PRINT' | 'NULL';
-
 const PostPage = () => {
   const params = useParams();
 
@@ -32,14 +30,10 @@ const PostPage = () => {
   const [roleFilter, setRoleFilter] = useState('');
   const [isShowFilter, setIsShowFilter] = useState<boolean>(true);
   const [articles, setArticles] = useState<Article[]>([]);
-  const [article, setArticle] = useState<Article | null>(null);
   const [reLoadData, setReLoadData] = useState<boolean>(false);
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
   const [limit, setLimit] = useState(10);
-
-  const [actions, setActions] = useState<btnActions>('CREATE');
-  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
 
   const validCategories = ['service', 'news', 'knowledge'];
 
@@ -108,17 +102,13 @@ const PostPage = () => {
       accessorKey: 'preview_img',
       header: 'HÌNH ẢNH',
       cell: ({ row }) => {
-        return (
-          <div>
-            <Image width={100} height={20} src={row.getValue('preview_img')} alt="" className="object-cover" />
-          </div>
-        );
+        return <Image width={120} height={20} src={row.getValue('preview_img')} alt="" className="object-cover rounded-md" />;
       },
     },
     {
       accessorKey: 'title',
       header: 'TIÊU ĐỀ',
-      cell: ({ row }) => <span className="font-medium text-md text-orange-600">{row.getValue('title')}</span>,
+      cell: ({ row }) => <span className="font-bold text-md text-orange-600">{row.getValue('title')}</span>,
     },
     {
       accessorKey: 'type',
@@ -219,14 +209,6 @@ const PostPage = () => {
               <PlusCircle className="w-6 h-6" />
               Tạo
             </Button>
-
-            {/* <HumanResourceForm
-              mode={actions}
-              humanResource={humanResource!}
-              isDialogOpen={isDialogOpen}
-              setIsDialogOpen={setIsDialogOpen}
-              reloadData={() => setReLoadData((prev) => !prev)}
-            /> */}
           </div>
         </div>
 

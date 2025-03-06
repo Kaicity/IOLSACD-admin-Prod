@@ -9,7 +9,7 @@ export enum ConsultationType {
 export const CONSULTATION_TYPES_LABEL: Record<ConsultationType, string> = {
   [ConsultationType.STUDY_ABROAD]: 'Tư vấn du học',
   [ConsultationType.CAREER]: 'Tư vấn nghề nghiệp',
-  [ConsultationType.FINANCE]: 'CTư vấn tài chính',
+  [ConsultationType.FINANCE]: 'Tư vấn tài chính',
   [ConsultationType.HEALTH]: 'Tư vấn sức khỏe',
   [ConsultationType.LEGAL]: 'Tư vấn pháp lý',
 };
@@ -22,8 +22,8 @@ export enum ReservationStatus {
 
 export const STATUS_LABELS: Record<ReservationStatus, string> = {
   [ReservationStatus.PENDING]: 'Chờ xử lý',
-  [ReservationStatus.CONFIRMED]: 'Đã xác nhận',
-  [ReservationStatus.CANCELLED]: 'Đã hủy',
+  [ReservationStatus.CONFIRMED]: 'Đã tư vấn',
+  [ReservationStatus.CANCELLED]: 'Hủy tư vấn',
 };
 
 export const STATUS_STYLES: Record<ReservationStatus, string> = {

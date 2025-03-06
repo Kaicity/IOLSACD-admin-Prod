@@ -4,6 +4,8 @@ import { Activity, FileText, Podcast, Users } from 'lucide-react';
 import { XAxis, YAxis, Tooltip, ResponsiveContainer, LineChart, CartesianGrid, Legend, Line } from 'recharts';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import withAuth from '../components/withAuth';
+import CountUp from 'react-countup';
+import Image from 'next/image';
 
 const Page = () => {
   const data_1 = [
@@ -82,6 +84,33 @@ const Page = () => {
     },
   ];
 
+  const recentActivities = [
+    {
+      id: 1,
+      title: 'Hướng dẫn sử dụng Next.js',
+      timeAgo: '2 giờ trước',
+      imageUrl: 'https://utfs.io/f/H7EoNX2A64p0Q3PAxm4XOisDKVZTU0wRjql9CE2M6mfagbP8',
+    },
+    {
+      id: 2,
+      title: 'Cập nhật công nghệ 2023',
+      timeAgo: '5 giờ trước',
+      imageUrl: 'https://utfs.io/f/H7EoNX2A64p0Q3PAxm4XOisDKVZTU0wRjql9CE2M6mfagbP8',
+    },
+    {
+      id: 3,
+      title: 'Người dùng mới: user123',
+      timeAgo: '1 ngày trước',
+      imageUrl: 'https://utfs.io/f/H7EoNX2A64p0Q3PAxm4XOisDKVZTU0wRjql9CE2M6mfagbP8',
+    },
+    {
+      id: 4,
+      title: 'React 19 sắp ra mắt',
+      timeAgo: '3 ngày trước',
+      imageUrl: 'https://utfs.io/f/H7EoNX2A64p0Q3PAxm4XOisDKVZTU0wRjql9CE2M6mfagbP8',
+    },
+  ];
+
   return (
     <div className="space-y-6">
       {/* Cards */}
@@ -96,7 +125,9 @@ const Page = () => {
               <div className="p-2 w-10 h-10 bg-primary/10 rounded-md">
                 <FileText className="w-6 h-6 text-primary" />
               </div>
-              <span className="text-2xl font-bold">120</span>
+              <span className="text-2xl font-bold">
+                <CountUp start={0} end={120} duration={2} separator="," />
+              </span>
             </div>
           </CardContent>
         </Card>
@@ -111,7 +142,9 @@ const Page = () => {
               <div className="p-2 w-10 h-10 bg-green-500/10 rounded-md">
                 <Podcast className="w-6 h-6 text-green-500" />
               </div>
-              <span className="text-2xl font-bold">45</span>
+              <span className="text-2xl font-bold">
+                <CountUp start={0} end={45} duration={2} separator="," />
+              </span>
             </div>
           </CardContent>
         </Card>
@@ -126,7 +159,9 @@ const Page = () => {
               <div className="p-2 w-10 h-10 bg-yellow-500/10 rounded-md">
                 <Activity className="w-6 h-6 text-yellow-500" />
               </div>
-              <span className="text-2xl font-bold">1,234</span>
+              <span className="text-2xl font-bold">
+                <CountUp start={0} end={1234} duration={2} separator="," />
+              </span>
             </div>
           </CardContent>
         </Card>
@@ -141,7 +176,9 @@ const Page = () => {
               <div className="p-2 w-10 h-10 bg-red-500/10 rounded-md">
                 <Users className="w-6 h-6 text-red-500" />
               </div>
-              <span className="text-2xl font-bold">56</span>
+              <span className="text-2xl font-bold">
+                <CountUp start={0} end={56} duration={2} separator="," />
+              </span>
             </div>
           </CardContent>
         </Card>
@@ -197,30 +234,16 @@ const Page = () => {
         <CardHeader>
           <CardTitle className="text-sm font-medium">Hoạt động gần đây</CardTitle>
         </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            <div className="flex items-center space-x-4">
-              <div className="w-2 h-2 bg-primary rounded-full"></div>
-              <div>
-                <p className="text-sm">Bài viết mới: Hướng dẫn sử dụng Nextjs</p>
-                <p className="text-xs text-gray-500">2 giờ trước</p>
+        <CardContent className="space-y-4">
+          {recentActivities.map((activity) => (
+            <div key={activity.id} className="flex items-center space-x-4 p-3 bg-muted rounded-lg hover:bg-accent transition">
+              <Image src={activity.imageUrl} alt={activity.title} width={100} height={100} className="rounded-md" />
+              <div className="flex-1">
+                <p className="text-sm font-medium">{activity.title}</p>
+                <p className="text-xs text-gray-500">{activity.timeAgo}</p>
               </div>
             </div>
-            <div className="flex items-center space-x-4">
-              <div className="w-2 h-2 bg-primary rounded-full"></div>
-              <div>
-                <p className="text-sm">Tin tức mới: Cập nhật công nghệ 2023</p>
-                <p className="text-xs text-gray-500">5 giờ trước</p>
-              </div>
-            </div>
-            <div className="flex items-center space-x-4">
-              <div className="w-2 h-2 bg-primary rounded-full"></div>
-              <div>
-                <p className="text-sm">Người dùng mới: user123</p>
-                <p className="text-xs text-gray-500">1 ngày trước</p>
-              </div>
-            </div>
-          </div>
+          ))}
         </CardContent>
       </Card>
     </div>
