@@ -173,13 +173,13 @@ export default function HumanResourceForm({
               className="sr-only"
             />
             {currentProfileImage ? (
-              <div className="relative size-16">
+              <div className="relative w-36 h-36">
                 <Image
                   src={currentProfileImage}
                   alt="profileImage"
-                  className="object-cover size-16 rounded-md"
-                  width={64}
-                  height={64}
+                  className="object-cover rounded-md w-full h-full"
+                  width={150}
+                  height={150}
                 />
                 <Button
                   onClick={handleDeleteImage}
@@ -187,7 +187,7 @@ export default function HumanResourceForm({
                   className="absolute w-4 h-7 -top-3 -right-3 rounded-full"
                   type="button"
                 >
-                  <X className="w-4 h-4"></X>
+                  <X className="w-4 h-4" />
                 </Button>
               </div>
             ) : (

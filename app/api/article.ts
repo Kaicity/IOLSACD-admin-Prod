@@ -22,8 +22,6 @@ export const getArticles = async (
       },
     });
 
-    console.log(response);
-
     if (response.data?.statusCode === 200 && response.data?.data) {
       return {
         articles: response.data?.data.articles,

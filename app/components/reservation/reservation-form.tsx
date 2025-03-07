@@ -151,10 +151,8 @@ export default function ReservationForm({
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogContent className="max-w-full max-h-[700px] md:max-w-[725px] md:max-h-[500px] lg:max-w-[925px] lg:max-h-[800px] overflow-auto">
         <DialogHeader>
-          <DialogTitle className="text-primary">{mode === 'CREATE' ? 'Tạo lịch tư vấn' : 'Cập nhật thông tin'}</DialogTitle>
-          <DialogDescription>
-            {mode === 'CREATE' ? 'Điền các thông tin tư vấn' : 'Cập nhật các thông tin tư vấn'}
-          </DialogDescription>
+          <DialogTitle className="text-primary">{mode === 'CREATE' ? 'Tạo lịch tư vấn' : 'Thông tin tư vấn'}</DialogTitle>
+          <DialogDescription>{mode === 'CREATE' ? 'Điền các thông tin tư vấn' : 'Tiếp nhận thông tin tư vấn'}</DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 items-center gap-4">

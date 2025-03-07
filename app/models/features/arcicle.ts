@@ -7,7 +7,7 @@ export default interface Article {
   type: string;
   summary: string;
   content: string;
-  views: number;
+  view: number;
   createDate: string;
   updateDate: string;
 }

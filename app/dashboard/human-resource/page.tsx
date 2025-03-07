@@ -12,7 +12,7 @@ import { useEffect, useState } from 'react';
 import HumanResourceForm from '../../components/human-resource/human-resoure-form';
 import type HumanResource from '@/app/models/features/human-resource';
 import withAuth from '@/app/components/withAuth';
-import { deleteHumanResourceById, getHumanResource } from '@/app/api/human-resource';
+import { deleteHumanResourceById, getHumanResource, updateHumanResourceById } from '@/app/api/human-resource';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { HUMAN_RESOURCE_ROLE_STYLES, HUMAN_RESOURCE_ROLES_LABEL, type HumanResourceRole } from '@/app/enums/human-resource.enum';
 import { cn } from '@/lib/utils';
@@ -22,6 +22,8 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Card } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { format } from 'date-fns';
+import { Switch } from '@/components/ui/switch';
+import { useRouter } from 'next/navigation';
 
 type btnActions = 'CREATE' | 'UPDATE' | 'SEE' | 'PRINT' | 'NULL';
 
@@ -38,6 +40,8 @@ function HumanResourcePage() {
 
   const [actions, setActions] = useState<btnActions>('CREATE');
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+
+  const navigation = useRouter();
 
   const fetchHumanResource = async () => {
     try {
@@ -83,6 +87,30 @@ function HumanResourcePage() {
     setHumanResource(null);
   };
 
+  const handleToggleShow = async (resource: HumanResource, checked: boolean) => {
+    try {
+      resource.isShow = checked;
+      const requestBody = {
+        fullName: resource?.fullName,
+        description: resource?.description,
+        gmail: resource?.gmail,
+        imgUrl: resource?.imgUrl,
+        phone: resource?.phone,
+        role: resource?.role,
+        isShow: resource?.isShow,
+      };
+      const request = await updateHumanResourceById(requestBody, resource.id);
+      if (request) {
+        toast.success('Cập nhật trạng thái hiển thị thành công');
+        fetchHumanResource();
+      } else {
+        toast.error('Cập nhật trạng thái hiển thị thất bại');
+      }
+    } catch (error: any) {
+      toast.error(error?.message || 'Có lỗi xảy ra');
+    }
+  };
+
   // Colunm Table
   const columns: ColumnDef<HumanResource>[] = [
     {
@@ -91,7 +119,7 @@ function HumanResourcePage() {
       cell: ({ row }) => {
         const name = row.getValue('fullName') as string;
         return (
-          <Avatar className="h-14 w-14 rounded-md object-cover">
+          <Avatar className="h-20 w-20 rounded-md object-cover">
             <AvatarImage src={row.getValue('imgUrl')} alt={name} />
             <AvatarFallback className="rounded-lg">
               {name
@@ -112,12 +140,14 @@ function HumanResourcePage() {
       },
     },
     {
-      accessorKey: 'title',
-      header: 'DANH HIỆU',
-      cell: ({ row }) => {
-        const title = row.getValue('title') as string;
-        return <span>{title}</span>;
-      },
+      accessorKey: 'phone',
+      header: 'SỐ ĐIỆN THOẠI',
+      cell: ({ row }) => (
+        <div className="flex items-center gap-2">
+          <PhoneCall className="h-4 w-4 text-green-600 font-bold animate-bounce" />
+          <span className="font-medium text-muted-foreground">{row.getValue('phone')}</span>
+        </div>
+      ),
     },
     {
       accessorKey: 'gmail',
@@ -129,16 +159,14 @@ function HumanResourcePage() {
         </div>
       ),
     },
-    {
-      accessorKey: 'phone',
-      header: 'SỐ ĐIỆN THOẠI',
-      cell: ({ row }) => (
-        <div className="flex items-center gap-2">
-          <PhoneCall className="h-4 w-4 text-green-600 font-bold animate-bounce" />
-          <span className="font-medium text-muted-foreground">{row.getValue('phone')}</span>
-        </div>
-      ),
-    },
+    // {
+    //   accessorKey: 'title',
+    //   header: 'DANH XƯNG',
+    //   cell: ({ row }) => {
+    //     const title = row.getValue('title') as string;
+    //     return <span>{title}</span>;
+    //   },
+    // },
     {
       accessorKey: 'role',
       header: 'CHỨC VỤ',
@@ -163,8 +191,16 @@ function HumanResourcePage() {
       },
     },
     {
+      accessorKey: 'isShow',
+      header: 'HIỂN THỊ',
+      cell: ({ row }) => {
+        const isShow = row.getValue('isShow') as boolean;
+        return <Switch checked={isShow} onCheckedChange={(checked) => handleToggleShow(row.original, checked)} />;
+      },
+    },
+    {
       id: 'actions',
-      header: 'Hành động',
+      header: 'HÀNH ĐỘNG',
       cell: ({ row }) => {
         const resource = row.original;
 
@@ -178,7 +214,7 @@ function HumanResourcePage() {
                 <EllipsisVertical className="w-4 h-4" />
               </DropdownMenuTrigger>
               <DropdownMenuContent side="bottom" align="end">
-                <DropdownMenuItem>
+                <DropdownMenuItem onClick={() => navigation.push(`/dashboard/human-resource-detail/${resource?.id}`)}>
                   <EyeIcon />
                   Xem chi tiết
                 </DropdownMenuItem>

@@ -26,7 +26,7 @@ import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
 import type { ColumnDef } from '@tanstack/react-table';
 import { format } from 'date-fns';
-import { Download, Edit, EllipsisVertical, EyeIcon, Mail, PhoneCall, PlusCircle, RotateCcwIcon, Trash } from 'lucide-react';
+import { Download, EllipsisVertical, Mail, PhoneCall, PlusCircle, RotateCcwIcon, SquareArrowRight, Trash } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
@@ -115,14 +115,6 @@ function ConsultingSchedule() {
       },
     },
     {
-      accessorKey: 'content',
-      header: 'NỘI DUNG',
-      cell: ({ row }) => {
-        const title = row.getValue('content') as string;
-        return <span>{title}</span>;
-      },
-    },
-    {
       accessorKey: 'gmail',
       header: 'GMAIL',
       cell: ({ row }) => (
@@ -163,21 +155,21 @@ function ConsultingSchedule() {
         return <span>{format(date, 'dd-MM-yyyy')}</span>;
       },
     },
-    // {
-    //   accessorKey: 'file',
-    //   header: 'TẢI XUỐNG',
-    //   cell: ({ row }) => {
-    //     const fileUrl = row.getValue('file') as string;
-    //     return fileUrl ? (
-    //       <a href={fileUrl} download className="flex items-center gap-2 text-blue-600 hover:underline">
-    //         <Download className="h-4 w-4" />
-    //         Tải xuống
-    //       </a>
-    //     ) : (
-    //       <span className="text-gray-400">Không có tệp</span>
-    //     );
-    //   },
-    // },
+    {
+      accessorKey: 'file',
+      header: 'ĐÍNH KÈM',
+      cell: ({ row }) => {
+        const fileUrl = row.getValue('file') as string;
+        return fileUrl ? (
+          <a href={fileUrl} download className="flex items-center gap-2 text-blue-600 hover:underline">
+            <Download className="h-4 w-4" />
+            Tải xuống
+          </a>
+        ) : (
+          <span className="text-gray-400">Không có tệp</span>
+        );
+      },
+    },
     {
       accessorKey: 'status',
       header: 'TRẠNG THÁI',
@@ -200,18 +192,15 @@ function ConsultingSchedule() {
         const resource = row.original;
 
         return (
-          <div className="flex space-x-2">
-            <Button variant="ghost" size="sm" onClick={() => handleUpdate(resource)}>
-              <Edit className="h-4 w-4" />
-            </Button>
+          <div className="justify-center flex">
             <DropdownMenu>
               <DropdownMenuTrigger>
                 <EllipsisVertical className="w-4 h-4" />
               </DropdownMenuTrigger>
               <DropdownMenuContent side="bottom" align="end">
-                <DropdownMenuItem>
-                  <EyeIcon />
-                  Xem chi tiết
+                <DropdownMenuItem onClick={() => handleUpdate(resource)}>
+                  <SquareArrowRight />
+                  Tiếp nhận tư vấn
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => handleDelete(resource)}>
                   <Trash />

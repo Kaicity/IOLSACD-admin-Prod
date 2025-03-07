@@ -92,11 +92,6 @@ const PostPage = () => {
     }
   };
 
-  const handleUpdate = (resource: Article) => {
-    console.log(resource?.id);
-    navigation.push(`/dashboard/update-post/${resource?.id}`);
-  };
-
   const columns: ColumnDef<Article>[] = [
     {
       accessorKey: 'preview_img',
@@ -160,13 +155,7 @@ const PostPage = () => {
 
         return (
           <div className="flex space-x-2">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => {
-                handleUpdate(article);
-              }}
-            >
+            <Button variant="ghost" size="sm" onClick={() => navigation.push(`/dashboard/update-post/${article?.id}`)}>
               <Edit className="h-4 w-4" />
             </Button>
             <DropdownMenu>
@@ -174,7 +163,7 @@ const PostPage = () => {
                 <EllipsisVertical className="w-4 h-4" />
               </DropdownMenuTrigger>
               <DropdownMenuContent side="bottom" align="end">
-                <DropdownMenuItem>
+                <DropdownMenuItem onClick={() => navigation.push(`/dashboard/detail-post/${article?.id}`)}>
                   <EyeIcon />
                   Xem chi tiết
                 </DropdownMenuItem>

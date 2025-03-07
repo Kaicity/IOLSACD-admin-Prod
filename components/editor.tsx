@@ -101,91 +101,109 @@ const Editor = ({ value, onChange }: { value: string; onChange: (content: string
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleBold().run()}
-          className={`px-2 py-1 border rounded ${editor.isActive('bold') ? 'bg-gray-300' : ''}`}
+          className={`px-2 py-1 border rounded ${editor.isActive('bold') ? 'ring-2 ring-primary text-primary' : ''}`}
         >
           <BoldIcon size={18} />
         </button>
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleItalic().run()}
-          className={`px-2 py-1 border rounded ${editor.isActive('italic') ? 'bg-gray-300' : ''}`}
+          className={`px-2 py-1 border rounded ${editor.isActive('italic') ? 'ring-2 ring-primary text-primary' : ''}`}
         >
           <ItalicIcon size={18} />
         </button>
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleUnderline().run()}
-          className={`px-2 py-1 border rounded ${editor.isActive('underline') ? 'bg-gray-300' : ''}`}
+          className={`px-2 py-1 border rounded ${editor.isActive('underline') ? 'ring-2 ring-primary text-primary' : ''}`}
         >
           <UnderlineIcon size={18} />
         </button>
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleStrike().run()}
-          className={`px-2 py-1 border rounded ${editor.isActive('strike') ? 'bg-gray-300' : ''}`}
+          className={`px-2 py-1 border rounded ${editor.isActive('strike') ? 'ring-2 ring-primary text-primary' : ''}`}
         >
           <StrikethroughIcon size={18} />
         </button>
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
-          className={`px-2 py-1 border rounded ${editor.isActive('heading', { level: 1 }) ? 'bg-gray-300' : ''}`}
+          className={`px-2 py-1 border rounded ${
+            editor.isActive('heading', { level: 1 }) ? 'ring-2 ring-primary text-primary' : ''
+          }`}
         >
           H1
         </button>
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-          className={`px-2 py-1 border rounded ${editor.isActive('heading', { level: 2 }) ? 'bg-gray-300' : ''}`}
+          className={`px-2 py-1 border rounded ${
+            editor.isActive('heading', { level: 2 }) ? 'ring-2 ring-primary text-primary' : ''
+          }`}
         >
           H2
         </button>
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
-          className={`px-2 py-1 border rounded ${editor.isActive('heading', { level: 3 }) ? 'bg-gray-300' : ''}`}
+          className={`px-2 py-1 border rounded ${
+            editor.isActive('heading', { level: 3 }) ? 'ring-2 ring-primary text-primary' : ''
+          }`}
         >
           H3
         </button>
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleHeading({ level: 4 }).run()}
-          className={`px-2 py-1 border rounded ${editor.isActive('heading', { level: 4 }) ? 'bg-gray-300' : ''}`}
+          className={`px-2 py-1 border rounded ${
+            editor.isActive('heading', { level: 4 }) ? 'ring-2 ring-primary text-primary' : ''
+          }`}
         >
           H4
         </button>
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleHeading({ level: 5 }).run()}
-          className={`px-2 py-1 border rounded ${editor.isActive('heading', { level: 5 }) ? 'bg-gray-300' : ''}`}
+          className={`px-2 py-1 border rounded ${
+            editor.isActive('heading', { level: 5 }) ? 'ring-2 ring-primary text-primary' : ''
+          }`}
         >
           H5
         </button>
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleHeading({ level: 6 }).run()}
-          className={`px-2 py-1 border rounded ${editor.isActive('heading', { level: 6 }) ? 'bg-gray-300' : ''}`}
+          className={`px-2 py-1 border rounded ${
+            editor.isActive('heading', { level: 6 }) ? 'ring-2 ring-primary text-primary' : ''
+          }`}
         >
           H6
         </button>
         <button
           type="button"
           onClick={() => editor.chain().focus().setTextAlign('left').run()}
-          className={`px-2 py-1 border rounded ${editor.isActive({ textAlign: 'left' }) ? 'bg-gray-300' : ''}`}
+          className={`px-2 py-1 border rounded ${
+            editor.isActive({ textAlign: 'left' }) ? 'ring-2 ring-primary text-primary' : ''
+          }`}
         >
           <AlignLeft className="w-4 h-4" />
         </button>
         <button
           type="button"
           onClick={() => editor.chain().focus().setTextAlign('center').run()}
-          className={`px-2 py-1 border rounded ${editor.isActive({ textAlign: 'center' }) ? 'bg-gray-300' : ''}`}
+          className={`px-2 py-1 border rounded ${
+            editor.isActive({ textAlign: 'center' }) ? 'ring-2 ring-primary text-primary' : ''
+          }`}
         >
           <AlignCenter className="w-4 h-4" />
         </button>
         <button
           type="button"
           onClick={() => editor.chain().focus().setTextAlign('right').run()}
-          className={`px-2 py-1 border rounded ${editor.isActive({ textAlign: 'right' }) ? 'bg-gray-300' : ''}`}
+          className={`px-2 py-1 border rounded ${
+            editor.isActive({ textAlign: 'right' }) ? 'ring-2 ring-primary text-primary' : ''
+          }`}
         >
           <AlignRight className="w-4 h-4" />
         </button>
@@ -193,14 +211,14 @@ const Editor = ({ value, onChange }: { value: string; onChange: (content: string
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleBulletList().run()}
-          className={`px-2 py-1 border rounded ${editor.isActive('bulletList') ? 'bg-gray-300' : ''}`}
+          className={`px-2 py-1 border rounded ${editor.isActive('bulletList') ? 'ring-2 ring-primary text-primary' : ''}`}
         >
           <List size={18} />
         </button>
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleOrderedList().run()}
-          className={`px-2 py-1 border rounded ${editor.isActive('orderedList') ? 'bg-gray-300' : ''}`}
+          className={`px-2 py-1 border rounded ${editor.isActive('orderedList') ? 'ring-2 ring-primary text-primary' : ''}`}
         >
           <ListOrdered size={18} />
         </button>
@@ -243,7 +261,7 @@ const Editor = ({ value, onChange }: { value: string; onChange: (content: string
       </div>
 
       <div className="p-2">
-        <div className="flex items-center gap-2">
+        <div className="flex-col lg:flex lg:flex-row lg:items-center gap-2">
           <div className="flex flex-col">
             <label>Chiều dài</label>
             <input
@@ -290,13 +308,13 @@ const Editor = ({ value, onChange }: { value: string; onChange: (content: string
       </div>
 
       {/* Editor */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 py-3">
+      <div className="flex-col space-y-4 lg:flex lg:flex-row lg:gap-x-4 py-3 lg:space-y-0">
         {/* Trình soạn thảo */}
 
         <EditorContent editor={editor} className="ProseMirror" />
 
         {/* Bố cục mẫu */}
-        <div className="border rounded-lg p-4 bg-gray-100 sticky top-4">
+        <div className="border rounded-lg p-4 bg-gray-100 sticky top-4 w-full lg:w-max">
           <h2 className="text-lg font-bold mb-2 text-primary">Bố cục mẫu</h2>
           <hr className="mb-1 border-muted-foreground" />
           <article>

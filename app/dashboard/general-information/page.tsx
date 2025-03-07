@@ -2,8 +2,8 @@
 
 import withAuth from '@/app/components/withAuth';
 
-function GeneralInformation() {
+function GeneralInformationPage() {
   return <div className="">GeneralInformation</div>;
 }
 
-export default withAuth(GeneralInformation);
+export default withAuth(GeneralInformationPage);

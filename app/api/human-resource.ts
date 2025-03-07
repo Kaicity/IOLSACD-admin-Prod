@@ -1,4 +1,5 @@
 import { instance } from '.';
+import type HumanResource from '../models/features/human-resource';
 import type { HumanResourcePagination } from '../models/features/human-resource';
 
 interface FilterParams {
@@ -81,6 +82,21 @@ export const updateHumanResourceById = async (humanResource: any, id: string): P
       return true;
     } else {
       return false;
+    }
+  } catch (error: any) {
+    const errorMessage = error.response?.data?.message;
+    throw new Error(errorMessage);
+  }
+};
+
+export const getHumanResourceById = async (id: string): Promise<HumanResource | null> => {
+  try {
+    const response = await instance.get(`member/${id}`);
+
+    if (response.data?.statusCode === 200) {
+      return response.data?.data;
+    } else {
+      return null;
     }
   } catch (error: any) {
     const errorMessage = error.response?.data?.message;

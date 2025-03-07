@@ -1,4 +1,4 @@
-import { Calendar, FileText, Home, Info, PieChart, UserCircle, Users2 } from 'lucide-react';
+import { Building, Calendar, FileText, Home, Info, PieChart, UserCircle, Users2 } from 'lucide-react';
 import type NavLink from '../models/nav-link.type';
 
 // Dữ liệu navLinks
@@ -58,6 +58,14 @@ export const navLinks: NavLink[] = [
     path: '/dashboard/consulting-schedule',
     label: 'Lịch Tư Vấn',
     icon: Calendar,
+    isActive: false,
+    children: [],
+    group: 'management',
+  },
+  {
+    path: '/dashboard/institute-ecosystem',
+    label: 'Hệ Sinh Thái Viện',
+    icon: Building,
     isActive: false,
     children: [],
     group: 'management',

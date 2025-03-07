@@ -6,8 +6,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import withAuth from '../components/withAuth';
 import CountUp from 'react-countup';
 import Image from 'next/image';
+import { useEffect, useState } from 'react';
+import Article from '../models/features/arcicle';
 
 const Page = () => {
+  const [articles, setArticles] = useState<Article | null>(null);
+
   const data_1 = [
     {
       name: 'Tháng 1',
@@ -110,6 +114,10 @@ const Page = () => {
       imageUrl: 'https://utfs.io/f/H7EoNX2A64p0Q3PAxm4XOisDKVZTU0wRjql9CE2M6mfagbP8',
     },
   ];
+
+  useEffect(() => {
+    const fetchArticlesRecently = async () => {};
+  }, []);
 
   return (
     <div className="space-y-6">
@@ -229,14 +237,16 @@ const Page = () => {
         </Card>
       </div>
 
-      {/* Hoạt động gần đây */}
       <Card>
         <CardHeader>
           <CardTitle className="text-sm font-medium">Hoạt động gần đây</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           {recentActivities.map((activity) => (
-            <div key={activity.id} className="flex items-center space-x-4 p-3 bg-muted rounded-lg hover:bg-accent transition">
+            <div
+              key={activity.id}
+              className="flex items-center space-x-4 p-3 bg-muted rounded-lg hover:bg-accent transition hover:shadow-lg cursor-pointer"
+            >
               <Image src={activity.imageUrl} alt={activity.title} width={100} height={100} className="rounded-md" />
               <div className="flex-1">
                 <p className="text-sm font-medium">{activity.title}</p>
