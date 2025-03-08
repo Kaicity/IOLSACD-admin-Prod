@@ -14,6 +14,7 @@ import {
   type ReservationStatus,
 } from '@/app/enums/reservation';
 import type Reservation from '@/app/models/features/reservation';
+import { formatDate } from '@/app/utils/formatDateUTC';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -27,12 +28,21 @@ import { cn } from '@/lib/utils';
 import type { ColumnDef } from '@tanstack/react-table';
 import { format } from 'date-fns';
 import { Download, EllipsisVertical, Mail, PhoneCall, PlusCircle, RotateCcwIcon, SquareArrowRight, Trash } from 'lucide-react';
+import { notFound, useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
 type btnActions = 'CREATE' | 'UPDATE' | 'SEE' | 'PRINT' | 'NULL';
 
 function ConsultingSchedule() {
+  const params = useParams();
+
+  const validCategories = ['consulting', 'contact'];
+
+  if (!validCategories.includes(params?.schedule_category as string)) {
+    notFound();
+  }
+
   const [searchValue, setSearchValue] = useState<string>('');
   const [typeFilter, setTypeFilter] = useState('');
   const [startDate, setStartDate] = useState<Date | null>(null);
@@ -49,13 +59,36 @@ function ConsultingSchedule() {
   const [actions, setActions] = useState<btnActions>('CREATE');
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
 
+  const scheduleType = () => {
+    let headerContent;
+    switch (params?.schedule_category) {
+      case 'consulting':
+        headerContent = {
+          title: 'Tư vấn',
+          subTitle: 'Quản lý thông tin tư vấn',
+        };
+        return headerContent;
+
+      case 'contact':
+        headerContent = {
+          title: 'Liên hệ',
+          subTitle: 'Quản lý thông tin liên hệ',
+        };
+        return headerContent;
+
+      default:
+        console.error('Not found value');
+        break;
+    }
+  };
+
   const fetchReservation = async () => {
     try {
       const response = await getReservation(page, limit, total, {
         query: searchValue,
         type: typeFilter,
-        startDate: startDate ? startDate.toISOString().split('T')[0] : '',
-        endDate: endDate ? endDate.toISOString().split('T')[0] : '',
+        startDate: startDate ? formatDate(startDate) : '',
+        endDate: endDate ? formatDate(endDate) : '',
       });
 
       setReservations(response.reservations);
@@ -96,12 +129,12 @@ function ConsultingSchedule() {
 
   const handleStartDateChange = (date: Date | undefined) => {
     setStartDate(date as Date);
-    console.log('Selected Date:', date);
+    // console.log('Selected Date:', date);
   };
 
   const handleSEndDateChange = (date: Date | undefined) => {
     setEndDate(date as Date);
-    console.log('Selected Date:', date);
+    // console.log('Selected Date:', date);
   };
 
   // Colunm Table
@@ -216,7 +249,7 @@ function ConsultingSchedule() {
 
   return (
     <div className="">
-      <HeaderContent title="Tư Vấn" subTitle="Quản lý thông tin tư vấn" />
+      <HeaderContent title={scheduleType()?.title as string} subTitle={scheduleType()?.subTitle as string} />
 
       <Card className="px-4 py-2 shadow-md">
         {/* Search Input */}

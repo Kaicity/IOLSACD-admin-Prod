@@ -23,8 +23,13 @@ import { toast } from 'sonner';
 
 const PostPage = () => {
   const params = useParams();
-
   const navigation = useRouter();
+
+  const validCategories = ['service', 'news', 'knowledge'];
+
+  if (!validCategories.includes(params?.category as string)) {
+    notFound();
+  }
 
   const [searchValue, setSearchValue] = useState<string>('');
   const [roleFilter, setRoleFilter] = useState('');
@@ -34,12 +39,6 @@ const PostPage = () => {
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
   const [limit, setLimit] = useState(10);
-
-  const validCategories = ['service', 'news', 'knowledge'];
-
-  if (!validCategories.includes(params?.category as string)) {
-    notFound();
-  }
 
   const fetchArticle = async () => {
     try {

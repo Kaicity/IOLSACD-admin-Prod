@@ -8,45 +8,55 @@ import CountUp from 'react-countup';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import Article from '../models/features/arcicle';
+import { Label } from '@/components/ui/label';
 
 const Page = () => {
   const [articles, setArticles] = useState<Article | null>(null);
 
   const data_1 = [
     {
-      name: 'Tháng 1',
+      name: 'T1',
       bài_viết: 40,
-      tin_tức: 24,
     },
     {
-      name: 'Tháng 2',
+      name: 'T2',
       bài_viết: 30,
-      tin_tức: 13,
     },
     {
-      name: 'Tháng 3',
+      name: 'T3',
       bài_viết: 20,
-      tin_tức: 98,
     },
     {
-      name: 'Tháng 4',
+      name: 'T4',
       bài_viết: 27,
-      tin_tức: 39,
     },
     {
-      name: 'Tháng 5',
+      name: 'T5',
       bài_viết: 18,
-      tin_tức: 48,
     },
     {
-      name: 'Tháng 6',
+      name: 'T6',
       bài_viết: 23,
-      tin_tức: 38,
     },
     {
-      name: 'Tháng 7',
+      name: 'T8',
       bài_viết: 34,
-      tin_tức: 43,
+    },
+    {
+      name: 'T9',
+      bài_viết: 34,
+    },
+    {
+      name: 'T10',
+      bài_viết: 34,
+    },
+    {
+      name: 'T11',
+      bài_viết: 34,
+    },
+    {
+      name: 'T12',
+      bài_viết: 34,
     },
   ];
 
@@ -123,10 +133,27 @@ const Page = () => {
     <div className="space-y-6">
       {/* Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <Card className="hover:shadow-xl transition-shadow duration-300 shadow-md border-b-4 border-b-yellow-500">
+          <CardHeader>
+            <CardTitle className="text-sm font-bold text-card-foreground">Lượt xem</CardTitle>
+            <CardDescription>Chỉ số lượt xem theo ngày</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center space-x-2">
+              <div className="p-2 w-10 h-10 bg-yellow-500/10 rounded-md">
+                <Activity className="w-6 h-6 text-yellow-500" />
+              </div>
+              <span className="text-2xl font-bold">
+                <CountUp start={0} end={1234} duration={2} separator="," />
+              </span>
+            </div>
+          </CardContent>
+        </Card>
+
         <Card className="hover:shadow-xl transition-shadow duration-300 shadow-md border-b-4 border-b-blue-500">
           <CardHeader>
-            <CardTitle className="text-sm font-bold text-card-foreground">Tổng bài viết</CardTitle>
-            <CardDescription>Chỉ số thu thập hàng tháng</CardDescription>
+            <CardTitle className="text-sm font-bold text-card-foreground">Tổng lịch tư vấn</CardTitle>
+            <CardDescription>Số lượng lịch tư vấn hôm nay</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="flex items-center space-x-2">
@@ -142,8 +169,8 @@ const Page = () => {
 
         <Card className="hover:shadow-xl transition-shadow duration-300 shadow-md border-b-4 border-b-green-500">
           <CardHeader>
-            <CardTitle className="text-sm font-bold text-card-foreground">Tổng tin tức</CardTitle>
-            <CardDescription>Chỉ số thu thập hàng tháng</CardDescription>
+            <CardTitle className="text-sm font-bold text-card-foreground">Tổng lịch liên hệ</CardTitle>
+            <CardDescription>Số lượng liên hệ hôm nay</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="flex items-center space-x-2">
@@ -157,27 +184,10 @@ const Page = () => {
           </CardContent>
         </Card>
 
-        <Card className="hover:shadow-xl transition-shadow duration-300 shadow-md border-b-4 border-b-yellow-500">
-          <CardHeader>
-            <CardTitle className="text-sm font-bold text-card-foreground">Lượt xem</CardTitle>
-            <CardDescription>Chỉ số thu thập hàng tháng</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-center space-x-2">
-              <div className="p-2 w-10 h-10 bg-yellow-500/10 rounded-md">
-                <Activity className="w-6 h-6 text-yellow-500" />
-              </div>
-              <span className="text-2xl font-bold">
-                <CountUp start={0} end={1234} duration={2} separator="," />
-              </span>
-            </div>
-          </CardContent>
-        </Card>
-
         <Card className="hover:shadow-xl transition-shadow duration-300 shadow-md border-b-4 border-b-red-500">
           <CardHeader>
-            <CardTitle className="text-sm font-bold text-card-foreground">Người dùng</CardTitle>
-            <CardDescription>Chỉ số thu thập hàng tháng</CardDescription>
+            <CardTitle className="text-sm font-bold text-card-foreground">Tổng số liên hệ - tư vấn đang chờ</CardTitle>
+            <CardDescription>Số lượng liên hệ - tư vấn đang chờ xử lý</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="flex items-center space-x-2">
@@ -196,7 +206,7 @@ const Page = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card>
           <CardHeader>
-            <CardTitle className="text-sm font-medium">Thống kê bài viết và tin tức</CardTitle>
+            <CardTitle className="text-sm font-medium">Thống kê số lượt xem trang web</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="h-64">
@@ -208,16 +218,18 @@ const Page = () => {
                   <Tooltip />
                   <Legend />
                   <Line type="monotone" dataKey="bài_viết" stroke="#8884d8" name="Bài viết" />
-                  <Line type="monotone" dataKey="tin_tức" stroke="#82ca9d" name="Tin tức" />
                 </LineChart>
               </ResponsiveContainer>
+              <Label className="text-muted-foreground text-sm flex justify-center">
+                {'('}Biểu diễn biểu đồ theo tháng từ Tháng 1 - Tháng 12{')'}
+              </Label>
             </div>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-sm font-medium">Thống kê bài viết và tin tức</CardTitle>
+            <CardTitle className="text-sm font-medium">Thống kê số lịch tư vấn - liên hệ</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="h-64">
@@ -232,6 +244,9 @@ const Page = () => {
                   <Line type="monotone" dataKey="tin_tức" stroke="#82ca9d" name="Tin tức" />
                 </LineChart>
               </ResponsiveContainer>
+              <Label className="text-muted-foreground text-sm flex justify-center">
+                {'('}Biểu diễn biểu đồ theo tháng từ Tháng 1 - Tháng 12{')'}
+              </Label>
             </div>
           </CardContent>
         </Card>

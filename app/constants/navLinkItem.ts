@@ -56,10 +56,23 @@ export const navLinks: NavLink[] = [
   },
   {
     path: '/dashboard/consulting-schedule',
-    label: 'Lịch Tư Vấn',
+    label: 'Lịch Tư Vấn - Liên Hệ',
     icon: Calendar,
     isActive: false,
-    children: [],
+    children: [
+      {
+        path: '/dashboard/consulting-schedule/consulting',
+        label: 'Tư vấn',
+        isActive: false,
+        group: 'management',
+      },
+      {
+        path: '/dashboard/consulting-schedule/contact',
+        label: 'Liên hệ',
+        isActive: false,
+        group: 'management',
+      },
+    ],
     group: 'management',
   },
   {
@@ -79,7 +92,7 @@ export const navLinks: NavLink[] = [
     group: 'statistic',
   },
   {
-    path: '/general',
+    path: '/dashboard/general-information',
     label: 'Thông tin chung',
     icon: Info,
     isActive: true,
