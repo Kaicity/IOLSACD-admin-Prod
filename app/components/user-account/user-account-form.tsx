@@ -99,7 +99,7 @@ export default function UserAccountForm({
         }
       }
     } catch (error: any) {
-      toast.error(error?.message);
+      toast.error(error?.message || 'Mất kết nối với máy chủ, vui lòng đợi phản hồi');
     }
   }, undefined);
 

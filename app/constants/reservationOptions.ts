@@ -1,13 +1,10 @@
 export const RESERVATION_TYPE_OPTIONS = [
-  { value: 'STUDY_ABROAD', label: 'Tư vấn du học' },
-  { value: 'CAREER', label: 'Tư vấn nghề nghiệp' },
-  { value: 'FINANCE', label: 'Tư vấn tài chính' },
-  { value: 'HEALTH', label: 'Tư vấn sức khỏe' },
-  { value: 'LEGAL', label: 'Tư vấn pháp lý' },
+  { value: 'CONSULTATION', label: 'Tư Vấn' },
+  { value: 'CONTACT', label: 'Liên Hệ' },
 ];
 
 export const RESERVATION_STATUS_OPTIONS = [
   { value: 'PENDING', label: 'Chờ xử lý' },
-  { value: 'CONFIRMED', label: 'Đã tư vấn' },
-  { value: 'CANCELLED', label: 'Hủy tư vấn' },
+  { value: 'CONFIRMED', label: 'Đã hoàn tất' },
+  { value: 'CANCELLED', label: 'Đã hủy' },
 ];

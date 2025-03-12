@@ -3,7 +3,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Button } from '@/components/ui/button';
 
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { CircleSlash2 } from 'lucide-react';
+import { Ban } from 'lucide-react';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -63,7 +63,7 @@ export function DataTable<TData, TValue>({
                 <TableCell colSpan={columns.length} className="h-24">
                   <div className="mx-auto flex flex-col items-center gap-2 text-muted-foreground text-md font-semibold">
                     <p className="">Không có dữ liệu.</p>
-                    <CircleSlash2 className="w-4 h-4" />
+                    <Ban className="w-4 h-4" />
                   </div>
                 </TableCell>
               </TableRow>

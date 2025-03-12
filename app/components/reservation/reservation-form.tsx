@@ -13,10 +13,11 @@ import { startTransition, useActionState, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { SubmitButton } from '../dashboard/SubmitButton';
-import { Download, X } from 'lucide-react';
+import { CalendarIcon, Download, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { DatePicker } from '@/components/ui/datepicker';
-import { format } from 'date-fns';
+import { formatDate } from '@/app/utils/formatDateUTC';
+import { addDays, format, isBefore } from 'date-fns';
 
 export default function ReservationForm({
   mode,
@@ -33,7 +34,7 @@ export default function ReservationForm({
   const [currentFileUrl, setCurrentFileUrl] = useState('');
   const [nameFileLabel, setNameFileLabel] = useState('');
 
-  const [consultDate, setConsultDate] = useState<Date | null>(null);
+  const [consultDate, setConsultDate] = useState<Date>(addDays(new Date(), 1));
 
   const handleDeleteFile = () => {
     setCurrentFileUrl('');
@@ -64,8 +65,6 @@ export default function ReservationForm({
   const [state, submitAction, isPending] = useActionState(async (prevState: any, formData: ReservationFormData) => {
     try {
       if (mode === 'CREATE') {
-        console.log(formData);
-
         const request = await createReservation(formData);
         if (request) {
           toast.success('Tạo lịch tư vấn thành công!');
@@ -107,7 +106,7 @@ export default function ReservationForm({
         }
       }
     } catch (error: any) {
-      toast.error(error?.message);
+      toast.error(error?.message || 'Mất kết nối với máy chủ, vui lòng đợi phản hồi');
     }
   }, undefined);
 
@@ -118,9 +117,19 @@ export default function ReservationForm({
   };
 
   const handleConsultDateChange = (date: Date | undefined) => {
+    if (!date) return;
+
+    const today = new Date();
+    const minDate = addDays(today, 1);
+
+    if (isBefore(date, minDate)) {
+      alert('Ngày tư vấn phải sau ngày hôm nay!');
+      setConsultDate(minDate);
+      return;
+    }
+
     setConsultDate(date as Date);
-    setValue('consultDate', date?.toISOString().split('T')[0] as string);
-    console.log('Selected Date:', date);
+    setValue('consultDate', formatDate(date as Date));
   };
 
   useEffect(() => {
@@ -132,8 +141,7 @@ export default function ReservationForm({
       reset({
         fullName: '',
         address: '',
-        consultDate: RESERVATION_STATUS_OPTIONS[0].value,
-        content: '',
+        consultDate: '',
         file: '',
         gmail: '',
         phone: '',
@@ -143,7 +151,7 @@ export default function ReservationForm({
     }
 
     if (consultDate) {
-      setValue('consultDate', format(consultDate, 'dd-MM-yyyy'));
+      setValue('consultDate', formatDate(consultDate));
     }
   }, [mode, reservation, reset, consultDate]);
 
@@ -151,19 +159,28 @@ export default function ReservationForm({
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogContent className="max-w-full max-h-[700px] md:max-w-[725px] md:max-h-[500px] lg:max-w-[925px] lg:max-h-[800px] overflow-auto">
         <DialogHeader>
-          <DialogTitle className="text-primary">{mode === 'CREATE' ? 'Tạo lịch tư vấn' : 'Thông tin tư vấn'}</DialogTitle>
-          <DialogDescription>{mode === 'CREATE' ? 'Điền các thông tin tư vấn' : 'Tiếp nhận thông tin tư vấn'}</DialogDescription>
+          <DialogTitle className="text-primary">
+            {mode === 'CREATE' ? 'Tạo lịch tư vấn - liên hệ' : 'Thông tin tư vấn - liên hệ'}
+          </DialogTitle>
+          <DialogDescription>{mode === 'CREATE' ? 'Điền thông tin cơ bản để tạo lịch' : 'Tiếp nhận thông tin'}</DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 items-center gap-4">
             <div className="flex flex-col gap-y-2 col-span-4 lg:col-span-1">
               <Label>Ngày tư vấn</Label>
-              <DatePicker
-                onDateChange={handleConsultDateChange}
-                startYear={1900}
-                dateValue={consultDate as Date}
-                endYear={new Date().getFullYear()}
-              />
+              {mode === 'CREATE' ? (
+                <DatePicker
+                  onDateChange={handleConsultDateChange}
+                  startYear={new Date().getFullYear()}
+                  dateValue={consultDate as Date}
+                  endYear={new Date().getFullYear()}
+                />
+              ) : (
+                <div className="flex items-center font-bold text-orange-500">
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  <span className="">{reservation?.consultDate && format(reservation?.consultDate, 'dd-MM-yyyy')}</span>
+                </div>
+              )}
               {errors.consultDate && <p className="text-red-500 text-sm">{errors.consultDate.message}</p>}
             </div>
 
@@ -199,7 +216,7 @@ export default function ReservationForm({
 
             {/* Type */}
             <div className="flex flex-col gap-y-2 col-span-4 lg:col-span-2">
-              <Label>Hình thức tư vấn</Label>
+              <Label>Hình thức</Label>
               <Select
                 defaultValue={reservation?.type}
                 onValueChange={(value) => {
@@ -208,7 +225,7 @@ export default function ReservationForm({
                 }}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Chọn hình thức tư vấn" />
+                  <SelectValue placeholder="Chọn hình thức" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
@@ -221,7 +238,7 @@ export default function ReservationForm({
                 </SelectContent>
               </Select>
 
-              {errors.type && <p className="text-red-500 text-sm">{errors.type.message}</p>}
+              {errors.type && <p className="text-red-500 text-sm">{'Hình thức là bắt buộc'}</p>}
             </div>
 
             {/* Email */}
@@ -233,7 +250,7 @@ export default function ReservationForm({
 
             {/* Type */}
             <div className="flex flex-col gap-y-2 col-span-4 lg:col-span-2">
-              <Label>Trạng thái</Label>
+              <Label className="text-primary font-bold">Trạng thái tiếp nhận</Label>
               <Select
                 defaultValue={reservation?.status}
                 onValueChange={(value) => {

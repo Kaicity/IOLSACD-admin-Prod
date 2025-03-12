@@ -1,6 +1,7 @@
 import { instance } from '.';
 import type Reservation from '../models/features/reservation';
 import type { ReservationPagination } from '../models/features/reservation';
+import type { ViewConsultingContact } from '../models/features/viewConsultingContact';
 
 interface FilterParams {
   query?: string;
@@ -21,7 +22,7 @@ export const getReservation = async (
         page,
         limit,
         total,
-        query: filters.query,
+        search: filters.query,
         type: filters.type,
         startDate: filters.startDate,
         endDate: filters.endDate,
@@ -38,7 +39,29 @@ export const getReservation = async (
         },
       };
     } else {
-      throw new Error('Failed to fetch human resource');
+      throw new Error('Failed to fetch reservation');
+    }
+  } catch (error: any) {
+    const errorMessage = error.response?.data?.message;
+    throw new Error(errorMessage);
+  }
+};
+
+export const getReservationTop5Recently = async (): Promise<ReservationPagination> => {
+  try {
+    const response = await instance.get(`reservation/recently/top5Pending`, {});
+
+    if (response.data?.statusCode === 200 && response.data?.data) {
+      return {
+        reservations: response.data?.data.reservations,
+        pagination: {
+          page: response.data?.data.pagination.page,
+          limit: response.data?.data.pagination.limit,
+          total: response.data?.data.pagination.total,
+        },
+      };
+    } else {
+      throw new Error('Failed to fetch reservation top 5');
     }
   } catch (error: any) {
     const errorMessage = error.response?.data?.message;
@@ -99,6 +122,20 @@ export const getReservationById = async (id: string): Promise<Reservation | null
       return response.data?.data;
     } else {
       return null;
+    }
+  } catch (error: any) {
+    const errorMessage = error.response?.data?.message;
+    throw new Error(errorMessage);
+  }
+};
+
+export const getAllReservationStatisticByYear = async (year: number): Promise<ViewConsultingContact[]> => {
+  try {
+    const response = await instance.get(`reservation/statistic/${year}`);
+    if (response.data?.statusCode === 200 && response.data?.data) {
+      return response.data?.data;
+    } else {
+      throw new Error('Failed to fetch view consulting and contact');
     }
   } catch (error: any) {
     const errorMessage = error.response?.data?.message;

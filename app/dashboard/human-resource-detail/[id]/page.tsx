@@ -32,7 +32,7 @@ function HumanReSourceDetailPage() {
           toast.error('Không tìm thấy thông tin người dùng');
         }
       } catch (error: any) {
-        toast.error(error || 'Lỗi dữ liệu lấy thông tin người dùng');
+        toast.error(error?.message || 'Mất kết nối với máy chủ, vui lòng đợi phản hồi');
       }
     };
 

@@ -1,35 +1,30 @@
 import { instance } from '.';
-import type HumanResource from '../models/features/human-resource';
-import type { HumanResourcePagination } from '../models/features/human-resource';
-import type { ViewMember } from '../models/features/viewMember';
+import type { EcoSystemPagination } from '../models/features/ecosystem';
+import type Ecosystem from '../models/features/human-resource';
 
 interface FilterParams {
   query?: string;
-  role?: string;
-  isShow?: string;
 }
 
-export const getHumanResource = async (
+export const getEcosystem = async (
   page: number,
   limit: number,
   total: number,
   filters: FilterParams,
-): Promise<HumanResourcePagination> => {
+): Promise<EcoSystemPagination> => {
   try {
-    const response = await instance.get(`member`, {
+    const response = await instance.get(`ecosystem`, {
       params: {
         page,
         limit,
         total,
         search: filters.query,
-        role: filters.role,
-        isShow: filters.isShow,
       },
     });
 
     if (response.data?.statusCode === 200 && response.data?.data) {
       return {
-        members: response.data?.data.members,
+        ecosystems: response.data?.data.Ecosystems,
         pagination: {
           page: response.data?.data.pagination.page,
           limit: response.data?.data.pagination.limit,
@@ -37,7 +32,7 @@ export const getHumanResource = async (
         },
       };
     } else {
-      throw new Error('Failed to fetch human resource');
+      throw new Error('Failed to fetch ecosystem');
     }
   } catch (error: any) {
     const errorMessage = error.response?.data?.message;
@@ -45,9 +40,9 @@ export const getHumanResource = async (
   }
 };
 
-export const createHumanResource = async (humanResource: any): Promise<boolean> => {
+export const createEcosystem = async (Ecosystem: any): Promise<boolean> => {
   try {
-    const response = await instance.post(`member`, humanResource);
+    const response = await instance.post(`ecosystem`, Ecosystem);
 
     if (response.data?.statusCode === 201) {
       return true;
@@ -60,9 +55,9 @@ export const createHumanResource = async (humanResource: any): Promise<boolean> 
   }
 };
 
-export const deleteHumanResourceById = async (id: string): Promise<boolean> => {
+export const deleteEcosystemById = async (id: string): Promise<boolean> => {
   try {
-    const response = await instance.delete(`member/${id}`);
+    const response = await instance.delete(`ecosystem/${id}`);
 
     if (response.data?.statusCode === 200) {
       return true;
@@ -75,9 +70,9 @@ export const deleteHumanResourceById = async (id: string): Promise<boolean> => {
   }
 };
 
-export const updateHumanResourceById = async (humanResource: any, id: string): Promise<boolean> => {
+export const updateEcosystemById = async (Ecosystem: any, id: string): Promise<boolean> => {
   try {
-    const response = await instance.put(`member/${id}`, humanResource);
+    const response = await instance.put(`ecosystem/${id}`, Ecosystem);
 
     if (response.data?.statusCode === 200) {
       return true;
@@ -90,28 +85,14 @@ export const updateHumanResourceById = async (humanResource: any, id: string): P
   }
 };
 
-export const getHumanResourceById = async (id: string): Promise<HumanResource | null> => {
+export const getEcosystemById = async (id: string): Promise<Ecosystem | null> => {
   try {
-    const response = await instance.get(`member/${id}`);
+    const response = await instance.get(`ecosystem/${id}`);
 
     if (response.data?.statusCode === 200) {
       return response.data?.data;
     } else {
       return null;
-    }
-  } catch (error: any) {
-    const errorMessage = error.response?.data?.message;
-    throw new Error(errorMessage);
-  }
-};
-
-export const getAllHumanResourceStatisticByYear = async (year: number): Promise<ViewMember[]> => {
-  try {
-    const response = await instance.get(`member/statistic/${year}`);
-    if (response.data?.statusCode === 200 && response.data?.data) {
-      return response.data?.data;
-    } else {
-      throw new Error('Failed to fetch view human resource');
     }
   } catch (error: any) {
     const errorMessage = error.response?.data?.message;

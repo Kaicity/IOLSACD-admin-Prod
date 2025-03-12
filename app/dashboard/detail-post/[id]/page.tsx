@@ -26,7 +26,7 @@ function DetailPostPage() {
           toast.error('Không tìm thấy thông tin bài báo');
         }
       } catch (error: any) {
-        toast.error(error || 'Lỗi dữ liệu lấy thông tin bài báo');
+        toast.error(error?.message || 'Mất kết nối với máy chủ, vui lòng đợi phản hồi');
       }
     };
 

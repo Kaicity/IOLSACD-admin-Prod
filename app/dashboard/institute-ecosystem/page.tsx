@@ -1,9 +1,11 @@
 'use client';
 
+import { deleteEcosystemById, getEcosystem, updateEcosystemById } from '@/app/api/ecosystem';
 import { DataTable } from '@/app/components/dashboard/DataTable';
 import HeaderContent from '@/app/components/dashboard/HeaderContent';
+import EcosystemForm from '@/app/components/ecosystem/ecosystem-form';
 import withAuth from '@/app/components/withAuth';
-import type InstituteEcosystem from '@/app/models/features/instituteEcosystem';
+import type { Ecosystem } from '@/app/models/features/ecosystem';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -25,8 +27,8 @@ function InstituteEcosystem() {
   const [searchValue, setSearchValue] = useState<string>('');
   const [roleFilter, setRoleFilter] = useState('');
   const [isShowFilter, setIsShowFilter] = useState<boolean>(true);
-  const [instituteEcosystems, setInstituteEcosystems] = useState<InstituteEcosystem[]>([]);
-  const [instituteEcosystem, setInstituteEcosystem] = useState<InstituteEcosystem | null>(null);
+  const [ecosystems, setEcosystems] = useState<Ecosystem[]>([]);
+  const [ecosystem, setEcosystem] = useState<Ecosystem | null>(null);
   const [reLoadData, setReLoadData] = useState<boolean>(false);
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
@@ -39,15 +41,16 @@ function InstituteEcosystem() {
 
   const fetchInstituteEcosystem = async () => {
     try {
-      // const response = await getHumanResource(page, limit, total, {
-      //   query: searchValue,
-      //   role: roleFilter,
-      //   isShow: isShowFilter,
-      // });
-      // setHumanResources(response.members);
-      // setTotal(response.pagination.total);
-    } catch (error) {
-      console.error('Error fetching human resource:', error);
+      const response = await getEcosystem(page, limit, total, {
+        query: searchValue,
+      });
+
+      console.log(response.ecosystems);
+
+      setEcosystems(response.ecosystems);
+      setTotal(response.pagination.total);
+    } catch (error: any) {
+      toast.error(error?.message || 'Mất kết nối với máy chủ, vui lòng đợi phản hồi');
     }
   };
 
@@ -55,21 +58,21 @@ function InstituteEcosystem() {
     fetchInstituteEcosystem();
   }, [page, limit, searchValue, roleFilter, isShowFilter, reLoadData]);
 
-  const handleUpdate = (resource: InstituteEcosystem) => {
+  const handleUpdate = (resource: Ecosystem) => {
     setActions('UPDATE');
     setIsDialogOpen(true);
-    setInstituteEcosystem(resource);
+    setEcosystem(resource);
   };
 
-  const handleDelete = async (resource: InstituteEcosystem) => {
+  const handleDelete = async (resource: Ecosystem) => {
     try {
-      // const request = await deleteHumanResourceById(resource.id);
-      // if (request) {
-      //   toast.success('Đã xóa nhân sự thành công');
-      //   fetchHumanResource();
-      // } else {
-      //   toast.error('Xóa nhân sự thất bại');
-      // }
+      const request = await deleteEcosystemById(resource.id);
+      if (request) {
+        toast.success('Đã xóa nhân sự thành công');
+        fetchInstituteEcosystem();
+      } else {
+        toast.error('Xóa nhân sự thất bại');
+      }
     } catch (error: any) {
       toast.error(error?.message);
     }
@@ -78,35 +81,35 @@ function InstituteEcosystem() {
   const handleCreate = () => {
     setActions('CREATE');
     setIsDialogOpen(true);
-    setInstituteEcosystem(null);
+    setEcosystem(null);
   };
 
-  const handleToggleShow = async (resource: InstituteEcosystem, checked: boolean) => {
+  const handleToggleShow = async (resource: Ecosystem, checked: boolean) => {
     try {
       resource.isShow = checked;
       const requestBody = {
-        name: resource?.name,
-        link: resource?.link,
-        logoUrl: resource?.logoUrl,
+        fullName: resource?.fullName,
+        imgUrl: resource?.imgUrl,
+        englishName: resource?.englishName,
         isShow: resource?.isShow,
       };
-      // const request = await updateHumanResourceById(requestBody, resource.id);
-      // if (request) {
-      //   toast.success('Cập nhật trạng thái hiển thị thành công');
-      //   fetchInstituteEcosystem();
-      // } else {
-      //   toast.error('Cập nhật trạng thái hiển thị thất bại');
-      // }
+      const request = await updateEcosystemById(requestBody, resource.id);
+      if (request) {
+        toast.success('Cập nhật trạng thái hiển thị thành công');
+        fetchInstituteEcosystem();
+      } else {
+        toast.error('Cập nhật trạng thái hiển thị thất bại');
+      }
     } catch (error: any) {
       toast.error(error?.message || 'Có lỗi xảy ra');
     }
   };
 
   // Colunm Table
-  const columns: ColumnDef<InstituteEcosystem>[] = [
+  const columns: ColumnDef<Ecosystem>[] = [
     {
       accessorKey: 'imgUrl',
-      header: 'ẢNH ĐẠI DIỆN',
+      header: 'ẢNH',
       cell: ({ row }) => {
         const name = row.getValue('fullName') as string;
         return (
@@ -123,22 +126,20 @@ function InstituteEcosystem() {
       },
     },
     {
-      accessorKey: 'name',
-      header: 'TÊN TỔ CHỨC',
+      accessorKey: 'fullName',
+      header: 'TÊN TIẾNG VIỆT',
       cell: ({ row }) => {
-        const name = row.getValue('name') as string;
+        const name = row.getValue('fullName') as string;
         return <span className="font-medium">{name?.toUpperCase()}</span>;
       },
     },
     {
-      accessorKey: 'link',
-      header: 'LIÊN KẾT',
-      cell: ({ row }) => (
-        <div className="flex items-center gap-2">
-          <Link className="h-4 w-4 text-primary font-bold" />
-          <span className="font-medium text-muted-foreground">{row.getValue('link')}</span>
-        </div>
-      ),
+      accessorKey: 'englishName',
+      header: 'TÊN TIẾNG ANH',
+      cell: ({ row }) => {
+        const name = row.getValue('englishName') as string;
+        return <span className="font-medium">{name?.toUpperCase()}</span>;
+      },
     },
     {
       accessorKey: 'createDate',
@@ -167,21 +168,9 @@ function InstituteEcosystem() {
             <Button variant="ghost" size="sm" onClick={() => handleUpdate(resource)}>
               <Edit className="h-4 w-4" />
             </Button>
-            <DropdownMenu>
-              <DropdownMenuTrigger>
-                <EllipsisVertical className="w-4 h-4" />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent side="bottom" align="end">
-                <DropdownMenuItem onClick={() => navigation.push(`/dashboard/human-resource-detail/${resource?.id}`)}>
-                  <EyeIcon />
-                  Xem chi tiết
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleDelete(resource)}>
-                  <Trash />
-                  Xóa
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <Button variant="ghost" size="sm" className="text-red-500" onClick={() => handleDelete(resource)}>
+              <Trash />
+            </Button>
           </div>
         );
       },
@@ -240,13 +229,13 @@ function InstituteEcosystem() {
               Tạo
             </Button>
 
-            {/* <HumanResourceForm
+            <EcosystemForm
               mode={actions}
-              humanResource={instituteEcosystem!}
+              humanResource={ecosystem!}
               isDialogOpen={isDialogOpen}
               setIsDialogOpen={setIsDialogOpen}
               reloadData={() => setReLoadData((prev) => !prev)}
-            /> */}
+            />
           </div>
         </div>
 
@@ -255,7 +244,7 @@ function InstituteEcosystem() {
         {/* Data Table */}
         <DataTable
           columns={columns}
-          data={instituteEcosystems}
+          data={ecosystems}
           page={page}
           total={total}
           limit={limit}

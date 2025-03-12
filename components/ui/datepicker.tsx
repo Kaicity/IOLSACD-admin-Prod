@@ -8,18 +8,8 @@ import { Calendar as CalendarIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from './select';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './select';
 
 interface isAppProps {
   startYear?: number;
@@ -57,10 +47,7 @@ export function DatePicker({
     'Tháng 11',
     'Tháng 12',
   ];
-  const years = Array.from(
-    { length: endYear - startYear + 1 },
-    (_, i) => startYear + i,
-  );
+  const years = Array.from({ length: endYear - startYear + 1 }, (_, i) => startYear + i);
 
   const handleMonthChange = (month: string) => {
     const newDate = setMonth(date, months.indexOf(month));
@@ -84,25 +71,15 @@ export function DatePicker({
       <PopoverTrigger asChild>
         <Button
           variant={'outline'}
-          className={cn(
-            'w-full justify-start text-left font-normal',
-            !date && 'text-muted-foreground',
-          )}
+          className={cn('w-full justify-start text-left font-normal', !date && 'text-muted-foreground')}
         >
           <CalendarIcon className="mr-2 h-4 w-4" />
-          {date ? (
-            format(date, 'dd-MM-yyyy', { locale: vi })
-          ) : (
-            <span>Chọn ngày</span>
-          )}
+          {date ? format(date, 'dd-MM-yyyy', { locale: vi }) : <span>Chọn ngày</span>}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0">
         <div className="flex justify-between p-2">
-          <Select
-            onValueChange={handleMonthChange}
-            value={months[getMonth(date)]}
-          >
+          <Select onValueChange={handleMonthChange} value={months[getMonth(date)]}>
             <SelectTrigger className="w-[110px]">
               <SelectValue placeholder="Tháng" />
             </SelectTrigger>
@@ -114,10 +91,7 @@ export function DatePicker({
               ))}
             </SelectContent>
           </Select>
-          <Select
-            onValueChange={handleYearChange}
-            value={getYear(date).toString()}
-          >
+          <Select onValueChange={handleYearChange} value={getYear(date).toString()}>
             <SelectTrigger className="w-[110px]">
               <SelectValue placeholder="Năm" />
             </SelectTrigger>

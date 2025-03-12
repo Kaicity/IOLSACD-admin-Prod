@@ -29,8 +29,8 @@ type btnActions = 'CREATE' | 'UPDATE' | 'SEE' | 'PRINT' | 'NULL';
 
 function HumanResourcePage() {
   const [searchValue, setSearchValue] = useState<string>('');
-  const [roleFilter, setRoleFilter] = useState('');
-  const [isShowFilter, setIsShowFilter] = useState<boolean>(true);
+  const [roleFilter, setRoleFilter] = useState<string>('');
+  const [isShowFilter, setIsShowFilter] = useState<string>('');
   const [humanResources, setHumanResources] = useState<HumanResource[]>([]);
   const [humanResource, setHumanResource] = useState<HumanResource | null>(null);
   const [reLoadData, setReLoadData] = useState<boolean>(false);
@@ -53,8 +53,8 @@ function HumanResourcePage() {
 
       setHumanResources(response.members);
       setTotal(response.pagination.total);
-    } catch (error) {
-      console.error('Error fetching human resource:', error);
+    } catch (error: any) {
+      toast.error(error?.message || 'Mất kết nối với máy chủ, vui lòng đợi phản hồi');
     }
   };
 
@@ -264,12 +264,31 @@ function HumanResourcePage() {
             </SelectContent>
           </Select>
 
+          <Select
+            value={isShowFilter}
+            onValueChange={(value) => {
+              console.log(value);
+
+              setIsShowFilter(value);
+            }}
+          >
+            <SelectTrigger className="w-full md:w-[180px]">
+              <SelectValue placeholder="Lọc theo trạng thái" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectItem value="true">Hiển thị</SelectItem>
+                <SelectItem value="false">Ẩn đi</SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+
           <Button
             variant="outline"
             onClick={() => {
               setSearchValue('');
               setRoleFilter('');
-              setIsShowFilter(true);
+              setIsShowFilter('');
               setPage(1);
             }}
           >

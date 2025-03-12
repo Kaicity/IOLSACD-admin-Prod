@@ -45,8 +45,8 @@ function UserAccountPage() {
       const response = await getUsers(page, limit, total, { search: searchValue, role: roleFilter });
       setUsers(response.accounts);
       setTotal(response.pagination.total);
-    } catch (error) {
-      console.error('Error fetching accounts:', error);
+    } catch (error: any) {
+      toast.error(error?.message || 'Mất kết nối với máy chủ, vui lòng đợi phản hồi');
     }
   };
 
