@@ -298,7 +298,7 @@ export default function ReservationForm({
                 <div className="flex items-center gap-2">
                   <a href={currentFileUrl} download className="flex items-center gap-2 text-blue-600 hover:underline">
                     <Download className="h-4 w-4" />
-                    {nameFileLabel || 'Chưa có file upload'}{' '}
+                    {nameFileLabel || 'Tải File đính kèm'}{' '}
                   </a>
                   <Button
                     onClick={handleDeleteFile}

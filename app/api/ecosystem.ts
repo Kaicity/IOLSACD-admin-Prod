@@ -4,6 +4,7 @@ import type Ecosystem from '../models/features/human-resource';
 
 interface FilterParams {
   query?: string;
+  isShow: string;
 }
 
 export const getEcosystem = async (
@@ -19,6 +20,7 @@ export const getEcosystem = async (
         limit,
         total,
         search: filters.query,
+        isShow: filters.isShow,
       },
     });
 

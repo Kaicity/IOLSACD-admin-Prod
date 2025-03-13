@@ -72,40 +72,42 @@ export function DataTable<TData, TValue>({
         </Table>
       </div>
 
-      <div className="flex flex-wrap items-center justify-between py-4">
-        <div className="text-sm text-muted-foreground">
-          Trang {page} / {totalPages}
-        </div>
+      {page !== 0 && total !== 0 && limit !== 0 && (
+        <div className="flex flex-wrap items-center justify-between py-4">
+          <div className="text-sm text-muted-foreground">
+            Trang {page} / {totalPages}
+          </div>
 
-        <div className="flex space-x-2">
-          <Select value={limit.toString()} onValueChange={(value) => onLimitChange(Number(value))}>
-            <SelectTrigger className="h-8 w-[70px]">
-              <SelectValue placeholder={limit.toString()} />
-            </SelectTrigger>
-            <SelectContent>
-              {[10, 20, 30, 40, 50].map((size) => (
-                <SelectItem key={size} value={size.toString()}>
-                  {size}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <div className="flex space-x-2">
+            <Select value={limit.toString()} onValueChange={(value) => onLimitChange(Number(value))}>
+              <SelectTrigger className="h-8 w-[70px]">
+                <SelectValue placeholder={limit.toString()} />
+              </SelectTrigger>
+              <SelectContent>
+                {[10, 20, 30, 40, 50].map((size) => (
+                  <SelectItem key={size} value={size.toString()}>
+                    {size}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
 
-          <Button variant="outline" size="sm" onClick={() => onPageChange(page - 1)} disabled={page <= 1}>
-            Trước
-          </Button>
-
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map((num) => (
-            <Button key={num} variant={page === num ? 'default' : 'outline'} size="sm" onClick={() => onPageChange(num)}>
-              {num}
+            <Button variant="outline" size="sm" onClick={() => onPageChange(page - 1)} disabled={page <= 1}>
+              Trước
             </Button>
-          ))}
 
-          <Button variant="outline" size="sm" onClick={() => onPageChange(page + 1)} disabled={page >= totalPages}>
-            Trang kế
-          </Button>
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((num) => (
+              <Button key={num} variant={page === num ? 'default' : 'outline'} size="sm" onClick={() => onPageChange(num)}>
+                {num}
+              </Button>
+            ))}
+
+            <Button variant="outline" size="sm" onClick={() => onPageChange(page + 1)} disabled={page >= totalPages}>
+              Trang kế
+            </Button>
+          </div>
         </div>
-      </div>
+      )}
     </>
   );
 }

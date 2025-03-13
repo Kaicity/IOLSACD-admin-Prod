@@ -93,6 +93,7 @@ function ConsultingSchedule() {
 
       setReservations(response.reservations);
       setTotal(response.pagination.total);
+      setLimit(response.pagination.limit);
     } catch (error) {
       console.error('Error fetching human resource:', error);
     }

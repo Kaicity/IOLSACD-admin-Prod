@@ -48,6 +48,7 @@ const PostPage = () => {
 
       setArticles(response.articles);
       setTotal(response.pagination.total);
+      setLimit(response.pagination.limit);
     } catch (error: any) {
       toast.error(error?.message || 'Mất kết nối với máy chủ, vui lòng đợi phản hồi');
     }

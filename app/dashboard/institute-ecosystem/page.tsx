@@ -9,14 +9,13 @@ import type { Ecosystem } from '@/app/models/features/ecosystem';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectGroup, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
 import { Switch } from '@/components/ui/switch';
 import type { ColumnDef } from '@tanstack/react-table';
 import { format } from 'date-fns';
-import { Edit, EllipsisVertical, EyeIcon, Link, PlusCircle, RotateCcwIcon, Trash } from 'lucide-react';
+import { Edit, PlusCircle, RotateCcwIcon, Trash } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
@@ -25,8 +24,7 @@ type btnActions = 'CREATE' | 'UPDATE' | 'SEE' | 'PRINT' | 'NULL';
 
 function InstituteEcosystem() {
   const [searchValue, setSearchValue] = useState<string>('');
-  const [roleFilter, setRoleFilter] = useState('');
-  const [isShowFilter, setIsShowFilter] = useState<boolean>(true);
+  const [isShowFilter, setIsShowFilter] = useState<string>('');
   const [ecosystems, setEcosystems] = useState<Ecosystem[]>([]);
   const [ecosystem, setEcosystem] = useState<Ecosystem | null>(null);
   const [reLoadData, setReLoadData] = useState<boolean>(false);
@@ -37,18 +35,16 @@ function InstituteEcosystem() {
   const [actions, setActions] = useState<btnActions>('CREATE');
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
 
-  const navigation = useRouter();
-
   const fetchInstituteEcosystem = async () => {
     try {
       const response = await getEcosystem(page, limit, total, {
         query: searchValue,
+        isShow: isShowFilter,
       });
-
-      console.log(response.ecosystems);
 
       setEcosystems(response.ecosystems);
       setTotal(response.pagination.total);
+      setLimit(response.pagination.limit);
     } catch (error: any) {
       toast.error(error?.message || 'Mất kết nối với máy chủ, vui lòng đợi phản hồi');
     }
@@ -56,7 +52,7 @@ function InstituteEcosystem() {
 
   useEffect(() => {
     fetchInstituteEcosystem();
-  }, [page, limit, searchValue, roleFilter, isShowFilter, reLoadData]);
+  }, [page, limit, searchValue, isShowFilter, reLoadData]);
 
   const handleUpdate = (resource: Ecosystem) => {
     setActions('UPDATE');
@@ -192,21 +188,20 @@ function InstituteEcosystem() {
           />
 
           <Select
-            value={roleFilter}
+            value={isShowFilter}
             onValueChange={(value) => {
-              setRoleFilter(value);
+              console.log(value);
+
+              setIsShowFilter(value);
             }}
           >
             <SelectTrigger className="w-full md:w-[180px]">
-              <SelectValue placeholder="Lọc theo chức vụ" />
+              <SelectValue placeholder="Lọc theo trạng thái" />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                {/* {HUMAN_RESOURCE_OPTIONS.map((role) => (
-                  <SelectItem key={role.value} value={role.value}>
-                    {role.label}
-                  </SelectItem>
-                ))} */}
+                <SelectItem value="true">Hiển thị</SelectItem>
+                <SelectItem value="false">Ẩn đi</SelectItem>
               </SelectGroup>
             </SelectContent>
           </Select>
@@ -215,8 +210,7 @@ function InstituteEcosystem() {
             variant="outline"
             onClick={() => {
               setSearchValue('');
-              setRoleFilter('');
-              setIsShowFilter(true);
+              setIsShowFilter('');
               setPage(1);
             }}
           >

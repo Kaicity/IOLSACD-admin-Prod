@@ -13,6 +13,7 @@ import type { ViewConsultingContact } from '@/app/models/features/viewConsulting
 import type { ViewMember } from '@/app/models/features/viewMember';
 import type { ViewWebsite } from '@/app/models/features/viewWebsite';
 import { generateYearChart } from '@/app/utils/generateYear';
+import ExportExcel from '@/components/export-excel';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -21,8 +22,8 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import { Separator } from '@/components/ui/separator';
 import { Tooltip } from '@/components/ui/tooltip';
 import type { ColumnDef } from '@tanstack/react-table';
-import { Ban, LoaderIcon, RotateCcwIcon } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { Loader2, RotateCcwIcon } from 'lucide-react';
+import { useState } from 'react';
 import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, XAxis, YAxis } from 'recharts';
 import { toast } from 'sonner';
 
@@ -82,7 +83,7 @@ function StatisticPage() {
       },
     },
     {
-      header: 'LƯỢT XEM',
+      header: 'SỐ LƯỢNG',
       accessorFn: (row) => row.quantity,
       cell: ({ getValue }) => {
         const quantity = getValue() as { consultations: number; contacts: number };
@@ -181,8 +182,8 @@ function StatisticPage() {
           title: 'Biểu đồ Lượt liên hệ tư vấn',
           data: viewConsultingContacts,
           lines: [
-            { key: 'quantity.consultations', color: '#82ca9d', label: 'Tư vấn' },
-            { key: 'quantity.contacts', color: '#ff7300', label: 'Liên hệ' },
+            { key: 'quantity.consultations', color: '#4169E1', label: 'Tư vấn' },
+            { key: 'quantity.contacts', color: '#82ca9d', label: 'Liên hệ' },
           ],
         };
 
@@ -198,9 +199,9 @@ function StatisticPage() {
           title: 'Biểu đồ Lượt xem bài viết',
           data: viewArticles,
           lines: [
-            { key: 'quantity.news', color: '#82ca9d', label: 'Tin tức' },
-            { key: 'quantity.knowledge', color: '#ff7300', label: 'Kiến thức' },
-            { key: 'quantity.service', color: '#4169E1', label: 'Dịch vụ' },
+            { key: 'quantity.news', color: '#4169E1', label: 'Tin tức' },
+            { key: 'quantity.knowledge', color: '#82ca9d', label: 'Kiến thức' },
+            { key: 'quantity.service', color: '#ff7300', label: 'Dịch vụ' },
           ],
         };
 
@@ -254,6 +255,27 @@ function StatisticPage() {
     }, 1500); // Giả lập thời gian tải 1.5 giây
   };
 
+  const columnsViewWebsiteExcel = [
+    { header: 'Tháng', key: 'dateName', width: 15 },
+    { header: 'Lượt Xem', key: 'view', width: 20 },
+  ];
+
+  const columnsViewConsultingContactExcel = [
+    { header: 'Tháng', key: 'dateName', width: 15 },
+    { header: 'Tư Vấn', key: 'consultations', width: 20 },
+    { header: 'Liên Hệ', key: 'contacts', width: 20 },
+  ];
+
+  const columnsViewMemberExcel = [
+    { header: 'Tháng', key: 'dateName', width: 15 },
+    { header: 'Số Lượng', key: 'quantity', width: 20 },
+  ];
+
+  const columnsViewArticleExcel = [
+    { header: 'Tháng', key: 'dateName', width: 15 },
+    { header: 'Số Lượng', key: 'view', width: 20 },
+  ];
+
   return (
     <div>
       <HeaderContent title="Báo cáo thống kê" subTitle="Biểu đồ báo cáo thống kê hằng năm" />
@@ -262,7 +284,7 @@ function StatisticPage() {
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
             {/* Chọn loại báo cáo */}
             <div className="space-y-2 col-span-5 md:col-span-2 lg:col-span-1">
-              <Label>Chọn loại báo cáo</Label>
+              <Label>Loại báo cáo</Label>
               <Select value={selectedReport || ''} onValueChange={(value) => setSelectedReport(value)}>
                 <SelectTrigger>
                   <SelectValue placeholder="Chọn loại báo cáo" />
@@ -315,13 +337,17 @@ function StatisticPage() {
             {/* Nút chạy báo cáo */}
             <div className="space-y-2 col-span-5">
               <div className="flex items-center gap-2">
-                <Button onClick={fetchReportData} disabled={loading}>
-                  {loading ? <LoaderIcon className="w-4 h-4 animate-spin" /> : 'Chạy báo cáo'}
+                <Button onClick={fetchReportData} disabled={loading} className="w-fit">
+                  {loading ? (
+                    <>
+                      <Loader2 className="size-4 mr-2 animate-spin" />
+                      Đang xử lý
+                    </>
+                  ) : (
+                    'Chạy báo cáo'
+                  )}
                 </Button>
 
-                <Button variant="link" className="ring-1 ring-green-500 text-green-500">
-                  Xuất Excel
-                </Button>
                 <Button variant={'outline'} className="" onClick={handleReset}>
                   <RotateCcwIcon className="w-6 h-6" />
                 </Button>
@@ -332,87 +358,98 @@ function StatisticPage() {
 
         <CardContent>
           <Separator />
-          <div className="flex gap-4 mt-6">
+          <div className="flex flex-col-reverse lg:flex-row gap-4 mt-6">
             {/* Bảng */}
             {showTable && (
               <div className="flex-1 overflow-auto">
                 {selectedReport === 'VIEW_WEBSITE' && (
-                  <DataTable
-                    columns={columnsViewWebsite}
-                    data={viewWebsites}
-                    page={0}
-                    total={0}
-                    limit={0}
-                    onPageChange={() => {}}
-                    onLimitChange={() => {}}
-                  />
+                  <>
+                    <div className="flex justify-end mb-2">
+                      <ExportExcel data={viewWebsites} columns={columnsViewWebsiteExcel} />
+                    </div>
+                    <DataTable
+                      columns={columnsViewWebsite}
+                      data={viewWebsites}
+                      page={0}
+                      total={0}
+                      limit={0}
+                      onPageChange={() => {}}
+                      onLimitChange={() => {}}
+                    />
+                  </>
                 )}
 
                 {selectedReport === 'VIEW_CONSULTING_CONTACT' && (
-                  <DataTable
-                    columns={columnViewConsultingContact}
-                    data={viewConsultingContacts}
-                    page={0}
-                    total={0}
-                    limit={0}
-                    onPageChange={() => {}}
-                    onLimitChange={() => {}}
-                  />
+                  <>
+                    <div className="flex justify-end mb-2">
+                      <ExportExcel data={viewConsultingContacts} columns={columnsViewConsultingContactExcel} />
+                    </div>
+                    <DataTable
+                      columns={columnViewConsultingContact}
+                      data={viewConsultingContacts}
+                      page={0}
+                      total={0}
+                      limit={0}
+                      onPageChange={() => {}}
+                      onLimitChange={() => {}}
+                    />
+                  </>
                 )}
 
                 {selectedReport === 'VIEW_MEMBER' && (
-                  <DataTable
-                    columns={columnsViewMember}
-                    data={viewMembers}
-                    page={0}
-                    total={0}
-                    limit={0}
-                    onPageChange={() => {}}
-                    onLimitChange={() => {}}
-                  />
+                  <>
+                    <div className="flex justify-end mb-2">
+                      <ExportExcel data={viewMembers} columns={columnsViewMemberExcel} />
+                    </div>
+                    <DataTable
+                      columns={columnsViewMember}
+                      data={viewMembers}
+                      page={0}
+                      total={0}
+                      limit={0}
+                      onPageChange={() => {}}
+                      onLimitChange={() => {}}
+                    />
+                  </>
                 )}
 
                 {selectedReport === 'VIEW_ARTICLE' && (
-                  <DataTable
-                    columns={columnViewArticle}
-                    data={viewArticles}
-                    page={0}
-                    total={0}
-                    limit={0}
-                    onPageChange={() => {}}
-                    onLimitChange={() => {}}
-                  />
+                  <>
+                    <div className="flex justify-end mb-2">
+                      <ExportExcel data={viewArticles} columns={columnsViewArticleExcel} />
+                    </div>
+                    <DataTable
+                      columns={columnViewArticle}
+                      data={viewArticles}
+                      page={0}
+                      total={0}
+                      limit={0}
+                      onPageChange={() => {}}
+                      onLimitChange={() => {}}
+                    />
+                  </>
                 )}
               </div>
             )}
 
             {/* Biểu đồ */}
-            {showChart && (
+            {showChart && chartData.length > 0 ? (
               <div className="flex-1 h-80 flex flex-col items-center justify-center border border-gray-300 rounded-lg">
-                {chartData.length > 0 ? (
-                  <>
-                    <h3 className="text-lg font-semibold text-center">{title}</h3>
-                    <ResponsiveContainer width="100%" height="100%">
-                      <LineChart width={730} height={250} data={chartData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey="dateName" />
-                        <YAxis />
-                        <Tooltip />
-                        <Legend />
-                        {chartLines.map((line, index) => (
-                          <Line key={index} type="monotone" dataKey={line.key} stroke={line.color} name={line.label} />
-                        ))}
-                      </LineChart>
-                    </ResponsiveContainer>
-                  </>
-                ) : (
-                  <div className="flex flex-col items-center justify-center h-full opacity-50">
-                    <Ban className="h-6 w-6" />
-                    <p className="text-gray-500 mt-2">Chưa có dữ liệu</p>
-                  </div>
-                )}
+                <h3 className="text-lg font-semibold text-center mt-3">{title}</h3>
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart width={730} height={250} data={chartData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="dateName" />
+                    <YAxis />
+                    <Tooltip />
+                    <Legend />
+                    {chartLines.map((line, index) => (
+                      <Line key={index} type="monotone" dataKey={line.key} stroke={line.color} name={line.label} />
+                    ))}
+                  </LineChart>
+                </ResponsiveContainer>
               </div>
-            )}
+            ) : null}
           </div>
         </CardContent>
       </Card>

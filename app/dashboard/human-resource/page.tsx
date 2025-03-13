@@ -52,6 +52,7 @@ function HumanResourcePage() {
       });
 
       setHumanResources(response.members);
+      setLimit(response.pagination.limit);
       setTotal(response.pagination.total);
     } catch (error: any) {
       toast.error(error?.message || 'Mất kết nối với máy chủ, vui lòng đợi phản hồi');
