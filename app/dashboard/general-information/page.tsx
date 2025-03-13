@@ -18,47 +18,47 @@ function GeneralInformationPage() {
           <CardDescription>Giới thiệu tổng quan về công ty</CardDescription>
         </CardHeader>
         <CardContent className="space-y-2 text-gray-700">
-          <div className="flex justify-between border-b pb-2">
+          <div className="flex flex-col gap-2 lg:flex-row lg:justify-between border-b pb-2">
             <Label className="font-semibold capitalize">Tên Công ty tiếng Việt</Label>
             <span>{'Viện Khoa học pháp lý và Phát triển doanh nghiệp'.toUpperCase()}</span>
           </div>
 
-          <div className="flex justify-between border-b pb-2">
+          <div className="flex flex-col gap-2 lg:flex-row lg:justify-between border-b pb-2">
             <Label className="font-semibold capitalize">Tên Công ty tiếng anh</Label>
             <span>{'Institute of Legal Science and Corporate Development'.toUpperCase()}</span>
           </div>
 
-          <div className="flex justify-between border-b pb-2">
+          <div className="flex flex-col gap-2 lg:flex-row lg:justify-between border-b pb-2">
             <Label className="font-semibold capitalize">Tên viết tắt</Label>
             <span className="text-orange-500 font-medium">ILC</span>
           </div>
 
-          <div className="flex justify-between border-b pb-2">
+          <div className="flex flex-col gap-2 lg:flex-row lg:justify-between border-b pb-2">
             <Label className="font-semibold capitalize">Địa chỉ</Label>
             <span>Số 32 đường 18, Khu phố 1, phường Phú Hữu, TP. Thủ Đức, TP. HCM</span>
           </div>
 
-          <div className="flex justify-between border-b pb-2">
+          <div className="flex flex-col gap-2 lg:flex-row lg:justify-between border-b pb-2">
             <Label className="font-semibold capitalize">Mã số thuế</Label>
             <span>0318760066</span>
           </div>
 
-          <div className="flex justify-between border-b pb-2">
+          <div className="flex flex-col gap-2 lg:flex-row lg:justify-between border-b pb-2">
             <Label className="font-semibold capitalize">Tài khoản ngân hàng</Label>
             <span>060329927450 Sacombank - Chi nhánh Sài Gòn</span>
           </div>
 
-          <div className="flex justify-between border-b pb-2">
+          <div className="flex flex-col gap-2 lg:flex-row lg:justify-between border-b pb-2">
             <Label className="font-semibold capitalize">Văn phòng tại tỉnh Bình Dương</Label>
             <span>Số 450 Phạm Ngọc Thạch, phường Phú Mỹ, thành phố Thủ Dầu Một, tỉnh Bình Dương</span>
           </div>
 
-          <div className="flex justify-between border-b pb-2">
+          <div className="flex flex-col gap-2 lg:flex-row lg:justify-between border-b pb-2">
             <Label className="font-semibold capitalize">Văn phòng tại Hà Nội</Label>
             <span>Số 70 Trung Hòa, phường Trung Hòa, quận Cầu Giấy, Hà Nội</span>
           </div>
 
-          <div className="flex justify-between border-b pb-2">
+          <div className="flex flex-col gap-2 lg:flex-row lg:justify-between border-b pb-2">
             <Label className="font-semibold capitalize">Email</Label>
             <span className="flex items-center gap-2">
               <Mail className="w-4 h-4 text-yellow-600" />
@@ -66,7 +66,7 @@ function GeneralInformationPage() {
             </span>
           </div>
 
-          <div className="flex justify-between border-b pb-2">
+          <div className="flex flex-col gap-2 lg:flex-row lg:justify-between border-b pb-2">
             <Label className="font-semibold capitalize">Website</Label>
             <span className="flex items-center gap-2 text-primary">
               <Link className="w-4 h-4" />
@@ -74,7 +74,7 @@ function GeneralInformationPage() {
             </span>
           </div>
 
-          <div className="flex justify-between border-b pb-2">
+          <div className="flex flex-col gap-2 lg:flex-row lg:justify-between border-b pb-2">
             <Label className="font-semibold capitalize">Hotline</Label>
             <span className="flex items-center gap-2 text-green-600">
               <Phone className="w-4 h-4" />

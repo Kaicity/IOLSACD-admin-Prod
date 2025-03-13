@@ -72,7 +72,7 @@ function GeneratePostDynamic() {
         toast.error('Tạo bài báo thất bại!');
       }
     } catch (error: any) {
-      toast.error(error?.message);
+      toast.error(error?.message || 'Mất kết nối với máy chủ, vui lòng đợi phản hồi');
     }
   }, undefined);
 

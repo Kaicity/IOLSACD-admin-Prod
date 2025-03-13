@@ -93,6 +93,7 @@ function ConsultingSchedule() {
 
       setReservations(response.reservations);
       setTotal(response.pagination.total);
+      setLimit(response.pagination.limit);
     } catch (error) {
       console.error('Error fetching human resource:', error);
     }
@@ -118,7 +119,9 @@ function ConsultingSchedule() {
       } else {
         toast.error('Xóa đặt lịch thất bại');
       }
-    } catch (error) {}
+    } catch (error: any) {
+      toast.error(error?.message || 'Mất kết nối với máy chủ, vui lòng đợi phản hồi');
+    }
   };
 
   const handleCreate = () => {
@@ -233,7 +236,7 @@ function ConsultingSchedule() {
               <DropdownMenuContent side="bottom" align="end">
                 <DropdownMenuItem onClick={() => handleUpdate(resource)}>
                   <SquareArrowRight />
-                  Tiếp nhận tư vấn
+                  Tiếp nhận thông tin
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => handleDelete(resource)}>
                   <Trash />

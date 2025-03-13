@@ -74,8 +74,8 @@ export default function HumanResourceForm({
           toast.error('Cập nhật nhân sự thất bại!');
         }
       }
-    } catch (error) {
-      toast.error('Đã có lỗi xảy ra khi thao tác dữ liệu');
+    } catch (error: any) {
+      toast.error(error?.message || 'Mất kết nối với máy chủ, vui lòng đợi phản hồi');
     }
   }, undefined);
 
