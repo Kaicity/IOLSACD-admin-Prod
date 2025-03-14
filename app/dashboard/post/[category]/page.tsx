@@ -60,6 +60,9 @@ const PostPage = () => {
 
   const toCreatePost = () => {
     switch (params?.category) {
+      case 'about':
+        navigation.push(`/dashboard/generate-post/about`);
+        break;
       case 'service':
         navigation.push(`/dashboard/generate-post/service`);
         break;

@@ -32,7 +32,7 @@ function GeneratePostDynamic() {
 
   const [labelType, setLabelType] = useState<String | null>('');
 
-  const validCategories = ['service', 'news', 'knowledge'];
+  const validCategories = ['about', 'service', 'news', 'knowledge'];
 
   if (!validCategories.includes(params?.generate_category as string)) {
     notFound();

@@ -1,4 +1,3 @@
-import { NextResponse } from 'next/server';
 import { createUploadthing, type FileRouter } from 'uploadthing/next';
 import { UploadThingError } from 'uploadthing/server';
 
@@ -18,7 +17,7 @@ export const ourFileRouter = {
     })
     .onUploadComplete(async ({ metadata, file }) => {
       console.log('Single image uploaded:', file.url);
-      return { uploadedBy: metadata.userId, fileUrl: file.url };
+      return { uploadedBy: metadata.userId, fileUrl: file.url, url: file.url, expiresIn: '1h' };
     }),
 
   // Cho phép upload nhiều file
