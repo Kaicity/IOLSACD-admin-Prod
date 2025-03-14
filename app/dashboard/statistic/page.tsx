@@ -83,26 +83,19 @@ function StatisticPage() {
       },
     },
     {
-      header: 'SỐ LƯỢNG',
-      accessorFn: (row) => row.quantity,
-      cell: ({ getValue }) => {
-        const quantity = getValue() as { consultations: number; contacts: number };
-        return (
-          <div className="flex flex-col gap-1 text-sm">
-            <div className="flex items-center gap-2">
-              <span className="text-blue-600 font-semibold">
-                <i className="fas fa-user-md"></i> Tư vấn:
-              </span>
-              <span className="font-medium text-gray-800">{quantity.consultations}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="text-green-600 font-semibold">
-                <i className="fas fa-phone-alt"></i> Liên hệ:
-              </span>
-              <span className="font-medium text-gray-800">{quantity.contacts}</span>
-            </div>
-          </div>
-        );
+      accessorKey: 'quantityConsult',
+      header: 'SỐ LƯỢNG TƯ VẤN',
+      cell: ({ row }) => {
+        const quantity = row.getValue('quantityConsult') as string;
+        return <span className="">{quantity}</span>;
+      },
+    },
+    {
+      accessorKey: 'quantityContact',
+      header: 'SỐ LƯỢNG LIÊN HỆ',
+      cell: ({ row }) => {
+        const quantity = row.getValue('quantityContact') as string;
+        return <span className="">{quantity}</span>;
       },
     },
   ];
@@ -138,32 +131,27 @@ function StatisticPage() {
       },
     },
     {
-      header: 'LƯỢT XEM',
-      accessorFn: (row) => row.quantity,
-      cell: ({ getValue }) => {
-        const quantity = getValue() as { news: number; knowledge: number; service: number };
-        return (
-          <div className="flex flex-col gap-1 text-sm">
-            <div className="flex items-center gap-2">
-              <span className="text-blue-600 font-semibold">
-                <i className="fas fa-user-md"></i> Tin tức:
-              </span>
-              <span className="font-medium text-gray-800">{quantity.news}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="text-green-600 font-semibold">
-                <i className="fas fa-phone-alt"></i> Kiến thức:
-              </span>
-              <span className="font-medium text-gray-800">{quantity.knowledge}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="text-orange-500 font-semibold">
-                <i className="fas fa-phone-alt"></i> Dịch vụ:
-              </span>
-              <span className="font-medium text-gray-800">{quantity.service}</span>
-            </div>
-          </div>
-        );
+      accessorKey: 'quantityNews',
+      header: 'SỐ LƯỢNG TIN TỨC',
+      cell: ({ row }) => {
+        const quantity = row.getValue('quantityNews') as string;
+        return <span className="">{quantity}</span>;
+      },
+    },
+    {
+      accessorKey: 'quantityKnowledge',
+      header: 'SỐ LƯỢNG KIẾN THỨC',
+      cell: ({ row }) => {
+        const quantity = row.getValue('quantityKnowledge') as string;
+        return <span className="">{quantity}</span>;
+      },
+    },
+    {
+      accessorKey: 'quantityService',
+      header: 'SỐ LƯỢNG DỊCH VỤ',
+      cell: ({ row }) => {
+        const quantity = row.getValue('quantityService') as string;
+        return <span className="">{quantity}</span>;
       },
     },
   ];
@@ -182,8 +170,8 @@ function StatisticPage() {
           title: 'Biểu đồ Lượt liên hệ tư vấn',
           data: viewConsultingContacts,
           lines: [
-            { key: 'quantity.consultations', color: '#4169E1', label: 'Tư vấn' },
-            { key: 'quantity.contacts', color: '#82ca9d', label: 'Liên hệ' },
+            { key: 'quantityConsult', color: '#4169E1', label: 'Tư vấn' },
+            { key: 'quantityContact', color: '#82ca9d', label: 'Liên hệ' },
           ],
         };
 
@@ -199,9 +187,9 @@ function StatisticPage() {
           title: 'Biểu đồ Lượt xem bài viết',
           data: viewArticles,
           lines: [
-            { key: 'quantity.news', color: '#4169E1', label: 'Tin tức' },
-            { key: 'quantity.knowledge', color: '#82ca9d', label: 'Kiến thức' },
-            { key: 'quantity.service', color: '#ff7300', label: 'Dịch vụ' },
+            { key: 'quantityNews', color: '#4169E1', label: 'Tin tức' },
+            { key: 'quantityKnowledge', color: '#82ca9d', label: 'Kiến thức' },
+            { key: 'quantityService', color: '#ff7300', label: 'Dịch vụ' },
           ],
         };
 
@@ -262,18 +250,21 @@ function StatisticPage() {
 
   const columnsViewConsultingContactExcel = [
     { header: 'Tháng', key: 'dateName', width: 15 },
-    { header: 'Tư Vấn', key: 'consultations', width: 20 },
-    { header: 'Liên Hệ', key: 'contacts', width: 20 },
+    { header: 'Tư Vấn', key: 'quantityConsult', width: 20 },
+    { header: 'Liên Hệ', key: 'quantityContact', width: 20 },
   ];
 
   const columnsViewMemberExcel = [
     { header: 'Tháng', key: 'dateName', width: 15 },
-    { header: 'Số Lượng', key: 'quantity', width: 20 },
+    { header: 'Số Lượng Tư Vấn', key: 'quantityConsult', width: 20 },
+    { header: 'Số Lượng Liên Hệ', key: 'quantityContact', width: 20 },
   ];
 
   const columnsViewArticleExcel = [
     { header: 'Tháng', key: 'dateName', width: 15 },
-    { header: 'Số Lượng', key: 'view', width: 20 },
+    { header: 'Số Lượng Tin Tức', key: 'quantityNews', width: 20 },
+    { header: 'Số Lượng Kiến Thức', key: 'quantityKnowledge', width: 20 },
+    { header: 'Số Lượng Dịch Vụ', key: 'quantityService', width: 20 },
   ];
 
   return (

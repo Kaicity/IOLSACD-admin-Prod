@@ -61,8 +61,6 @@ const Page = () => {
   const [yearViewWebsite, setYearViewWebsite] = useState<string>(new Date().getFullYear().toString());
   const [yearConsultingContact, setYearConsultingContact] = useState<string>(new Date().getFullYear().toString());
 
-  const [viewCardWebsite, setViewCardWebsite] = useState<number>();
-
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [reLoadData, setReLoadData] = useState<boolean>(false);
 
@@ -305,8 +303,8 @@ const Page = () => {
                   <YAxis />
                   <Tooltip />
                   <Legend />
-                  <Line type="monotone" dataKey="quantity.consultations" stroke="#8884d8" name="Tư Vấn" />
-                  <Line type="monotone" dataKey="quantity.contacts" stroke="#82ca9d" name="Liên Hệ" />
+                  <Line type="monotone" dataKey="quantityConsult" stroke="#8884d8" name="Tư Vấn" />
+                  <Line type="monotone" dataKey="quantityContact" stroke="#82ca9d" name="Liên Hệ" />
                 </LineChart>
               </ResponsiveContainer>
               <Label className="text-muted-foreground text-sm flex justify-center">

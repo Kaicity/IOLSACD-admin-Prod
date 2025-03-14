@@ -1,8 +1,6 @@
 export interface ViewArticle {
   dateName: string;
-  quantity: {
-    news: number;
-    knowledge: number;
-    service: number;
-  };
+  quantityNews: number;
+  quantityKnowledge: number;
+  quantityService: number;
 }
