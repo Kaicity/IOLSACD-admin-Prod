@@ -8,6 +8,7 @@ export default interface Article {
   summary: string;
   content: string;
   view: number;
+  language: string;
   createDate: string;
   updateDate: string;
 }

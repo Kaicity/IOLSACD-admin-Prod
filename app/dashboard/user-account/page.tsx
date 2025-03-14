@@ -43,6 +43,7 @@ function UserAccountPage() {
   const fetchUsers = async () => {
     try {
       const response = await getUsers(page, limit, total, { search: searchValue, role: roleFilter });
+
       setUsers(response.accounts);
       setTotal(response.pagination.total);
       setLimit(response.pagination.limit);

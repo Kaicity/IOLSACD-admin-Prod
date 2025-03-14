@@ -4,6 +4,7 @@ import { createArticle } from '@/app/api/article';
 import { SubmitButton } from '@/app/components/dashboard/SubmitButton';
 import withAuth from '@/app/components/withAuth';
 import { ARTICLE_OPTIONS } from '@/app/constants/articleOptions';
+import { LANGUAGE_OPTIONS } from '@/app/constants/languageOptions';
 import { ARTICLE_TYPE_LABEL, ArticleType } from '@/app/enums/article';
 import { articleFormSchema, type ArticleFormData } from '@/app/schemas/article-schema';
 import Editor from '@/components/editor';
@@ -51,7 +52,7 @@ function GeneratePostDynamic() {
     formState: { errors },
   } = useForm<ArticleFormData>({
     resolver: zodResolver(articleFormSchema),
-    defaultValues: { title: '', content: '', preview_img: '', summary: '', type: '' },
+    defaultValues: { title: '', content: '', preview_img: '', summary: '', type: '', language: '' },
   });
 
   const generateTypeByParam = (param: string) => {
@@ -199,17 +200,26 @@ function GeneratePostDynamic() {
                 {/* Ngôn ngữ */}
                 <div className="flex flex-col gap-y-2 col-span-1">
                   <Label>Chọn ngôn ngữ bài báo</Label>
-                  <Select>
+                  <Select
+                    onValueChange={(value) => {
+                      setValue('language', value);
+                      trigger('language');
+                    }}
+                  >
                     <SelectTrigger className="w-full">
                       <SelectValue placeholder="Chọn ngôn ngữ" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectGroup>
-                        <SelectItem value="ENDLISH">Tiếng Anh</SelectItem>
-                        <SelectItem value="VIETNAMESE">Tiếng Việt</SelectItem>
+                        {LANGUAGE_OPTIONS.map((language) => (
+                          <SelectItem key={language.value} value={language.value}>
+                            {language.label}
+                          </SelectItem>
+                        ))}
                       </SelectGroup>
                     </SelectContent>
                   </Select>
+                  {errors.language && <p className="text-red-500 text-sm">{errors.language.message}</p>}
                 </div>
 
                 {/* Nội dung bài báo */}

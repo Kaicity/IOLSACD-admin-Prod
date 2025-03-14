@@ -7,7 +7,6 @@ import withAuth from '@/app/components/withAuth';
 import { ARTICLE_TYPE_LABEL, ARTICLE_TYPE_STYLES, type ArticleType } from '@/app/enums/article';
 import type Article from '@/app/models/features/arcicle';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
@@ -15,25 +14,25 @@ import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
 import type { ColumnDef } from '@tanstack/react-table';
 import { format } from 'date-fns';
-import { Edit, EllipsisVertical, EyeIcon, PlusCircle, Trash } from 'lucide-react';
+import { Edit, EllipsisVertical, EyeIcon, PlusCircle, RotateCcwIcon, Trash } from 'lucide-react';
 import Image from 'next/image';
 import { notFound, useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
+import { Button } from '@/components/ui/button';
 
 const PostPage = () => {
   const params = useParams();
   const navigation = useRouter();
 
-  const validCategories = ['service', 'news', 'knowledge'];
+  const validCategories = ['about', 'service', 'news', 'knowledge'];
 
   if (!validCategories.includes(params?.category as string)) {
     notFound();
   }
 
   const [searchValue, setSearchValue] = useState<string>('');
-  const [roleFilter, setRoleFilter] = useState('');
-  const [isShowFilter, setIsShowFilter] = useState<boolean>(true);
+  const [typeFilter, setTypeFilter] = useState(params?.category?.toString().toUpperCase());
   const [articles, setArticles] = useState<Article[]>([]);
   const [reLoadData, setReLoadData] = useState<boolean>(false);
   const [page, setPage] = useState(1);
@@ -44,6 +43,7 @@ const PostPage = () => {
     try {
       const response = await getArticles(page, limit, total, {
         search: searchValue,
+        type: typeFilter,
       });
 
       setArticles(response.articles);
@@ -56,7 +56,7 @@ const PostPage = () => {
 
   useEffect(() => {
     fetchArticle();
-  }, [page, limit, searchValue, roleFilter, isShowFilter, reLoadData]);
+  }, [page, limit, searchValue, typeFilter, reLoadData]);
 
   const toCreatePost = () => {
     switch (params?.category) {
@@ -97,7 +97,7 @@ const PostPage = () => {
       accessorKey: 'preview_img',
       header: 'HÌNH ẢNH',
       cell: ({ row }) => {
-        return <Image width={120} height={20} src={row.getValue('preview_img')} alt="" className="object-cover rounded-md" />;
+        return <Image width={150} height={30} src={row.getValue('preview_img')} alt="" className="object-cover rounded-md" />;
       },
     },
     {
@@ -192,6 +192,16 @@ const PostPage = () => {
             onChange={(event) => setSearchValue(event.target.value)}
             className="max-w-sm sm:w-full"
           />
+
+          <Button
+            variant="outline"
+            onClick={() => {
+              setSearchValue('');
+              setPage(1);
+            }}
+          >
+            <RotateCcwIcon className="w-6 h-6" />
+          </Button>
 
           <div className="ml-auto">
             <Button variant="default" className="w-full sm:w-auto" onClick={toCreatePost}>

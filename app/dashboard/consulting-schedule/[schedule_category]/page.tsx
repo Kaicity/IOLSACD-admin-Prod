@@ -37,18 +37,17 @@ type btnActions = 'CREATE' | 'UPDATE' | 'SEE' | 'PRINT' | 'NULL';
 function ConsultingSchedule() {
   const params = useParams();
 
-  const validCategories = ['consulting', 'contact'];
+  const validCategories = ['consultation', 'contact'];
 
   if (!validCategories.includes(params?.schedule_category as string)) {
     notFound();
   }
 
   const [searchValue, setSearchValue] = useState<string>('');
-  const [typeFilter, setTypeFilter] = useState('');
+  const [typeFilter, setTypeFilter] = useState(params?.schedule_category?.toString().toUpperCase());
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
 
-  const [isShowFilter, setIsShowFilter] = useState<boolean>(true);
   const [reservations, setReservations] = useState<Reservation[]>([]);
   const [reservation, setReservation] = useState<Reservation | null>(null);
   const [reLoadData, setReLoadData] = useState<boolean>(false);
@@ -62,7 +61,7 @@ function ConsultingSchedule() {
   const scheduleType = () => {
     let headerContent;
     switch (params?.schedule_category) {
-      case 'consulting':
+      case 'consultation':
         headerContent = {
           title: 'Tư vấn',
           subTitle: 'Quản lý thông tin tư vấn',
@@ -101,7 +100,7 @@ function ConsultingSchedule() {
 
   useEffect(() => {
     fetchReservation();
-  }, [page, limit, searchValue, typeFilter, isShowFilter, reLoadData, startDate, endDate]);
+  }, [page, limit, searchValue, typeFilter, reLoadData, startDate, endDate]);
 
   const handleUpdate = async (resource: Reservation) => {
     setActions('UPDATE');
@@ -264,7 +263,8 @@ function ConsultingSchedule() {
             className="max-w-sm sm:w-full"
           />
 
-          <Select
+          {/* Filter type */}
+          {/* <Select
             value={typeFilter}
             onValueChange={(value) => {
               setTypeFilter(value);
@@ -282,9 +282,9 @@ function ConsultingSchedule() {
                 ))}
               </SelectGroup>
             </SelectContent>
-          </Select>
+          </Select> */}
 
-          <div className="w-full lg:w-[250px] lg:ml-8">
+          <div className="w-full lg:w-[250px] lg:ml-4">
             <div className="flex items-center gap-2">
               <Label className="whitespace-nowrap text-primary">Từ ngày /</Label>
               <DatePicker
@@ -296,7 +296,7 @@ function ConsultingSchedule() {
             </div>
           </div>
 
-          <div className="w-full lg:w-[250px]">
+          <div className="w-full lg:w-[250px] lg:ml-4">
             <div className="flex items-center gap-2">
               <Label className="whitespace-nowrap text-primary">Đến ngày /</Label>
               <DatePicker
@@ -312,10 +312,8 @@ function ConsultingSchedule() {
             variant="outline"
             onClick={() => {
               setSearchValue('');
-              setTypeFilter('');
               setStartDate(null);
               setEndDate(null);
-              setIsShowFilter(true);
               setPage(1);
             }}
           >

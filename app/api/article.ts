@@ -5,6 +5,7 @@ import type { ViewArticle } from '../models/features/viewArticle';
 
 interface FilterParams {
   search?: string;
+  type?: string;
 }
 
 export const getArticles = async (
@@ -20,6 +21,7 @@ export const getArticles = async (
         limit,
         total,
         search: filters.search,
+        type: filters.type,
       },
     });
 

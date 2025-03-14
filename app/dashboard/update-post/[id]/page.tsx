@@ -4,6 +4,7 @@ import { getArticleById, updateArticleById } from '@/app/api/article';
 import { SubmitButton } from '@/app/components/dashboard/SubmitButton';
 import withAuth from '@/app/components/withAuth';
 import { ARTICLE_OPTIONS } from '@/app/constants/articleOptions';
+import { LANGUAGE_OPTIONS } from '@/app/constants/languageOptions';
 import { ARTICLE_TYPE_LABEL, ArticleType } from '@/app/enums/article';
 import type Article from '@/app/models/features/arcicle';
 import { articleFormSchema, type ArticleFormData } from '@/app/schemas/article-schema';
@@ -69,7 +70,7 @@ function UpdatePostDynamic() {
     formState: { errors },
   } = useForm<ArticleFormData>({
     resolver: zodResolver(articleFormSchema),
-    defaultValues: { title: '', content: '', preview_img: '', summary: '', type: '' },
+    defaultValues: { title: '', content: '', preview_img: '', summary: '', type: '', language: '' },
   });
 
   const [state, submitAction, isPending] = useActionState(async (prevState: any, formData: ArticleFormData) => {
@@ -77,7 +78,7 @@ function UpdatePostDynamic() {
       const request = await updateArticleById(formData, article?.id as string);
       if (request) {
         toast.success('Cập nhật bài báo thành công!');
-        reset({ title: '', content: '', preview_img: '', summary: '', type: '' });
+        reset({ title: '', content: '', preview_img: '', summary: '', type: '', language: '' });
         navigation.push('/dashboard/post/service');
       } else {
         toast.error('Cập nhật bài báo thất bại!');
@@ -195,6 +196,32 @@ function UpdatePostDynamic() {
                     />
                   )}
                   {errors.preview_img && <p className="text-red-500 text-sm">{errors.preview_img.message}</p>}
+                </div>
+
+                {/* Ngôn ngữ */}
+                <div className="flex flex-col gap-y-2 col-span-1">
+                  <Label>Chọn ngôn ngữ bài báo</Label>
+                  <Select
+                    value={watch('language')}
+                    onValueChange={(value) => {
+                      setValue('language', value);
+                      trigger('language');
+                    }}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Chọn ngôn ngữ" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        {LANGUAGE_OPTIONS.map((language) => (
+                          <SelectItem key={language.value} value={language.value}>
+                            {language.label}
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                  {errors.language && <p className="text-red-500 text-sm">{errors.language.message}</p>}
                 </div>
 
                 {/* Nội dung bài báo */}
