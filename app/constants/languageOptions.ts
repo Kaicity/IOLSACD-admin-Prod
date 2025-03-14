@@ -1,5 +1,5 @@
 export const LANGUAGE_OPTIONS = [
-  { value: 'ENGLISH', label: 'Tiếng Anh' },
-  { value: 'VIETNAMESE', label: 'Tiếng Việt' },
-  { value: 'CHINESE', label: 'Tiếng Trung' },
+  { value: 'EN', label: 'Tiếng Anh' },
+  { value: 'VI', label: 'Tiếng Việt' },
+  { value: 'ZH', label: 'Tiếng Trung' },
 ];
